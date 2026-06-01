@@ -37,25 +37,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .authenticationProvider(authProvider())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/auth/**", "/css/**", "/js/**", "/images/**", "/h2-console/**", "/anchorwear/**")
-                        .permitAll()
-                        .anyRequest().authenticated())
-                .formLogin(form -> form
-                        .loginPage("/auth/login")
-                        .loginProcessingUrl("/auth/login")
-                        .defaultSuccessUrl("/dashboard", true)
-                        .failureUrl("/auth/login?error=true")
-                        .permitAll())
-                .logout(logout -> logout
-                        .logoutUrl("/auth/logout")
-                        .logoutSuccessUrl("/auth/login?logout=true")
-                        .permitAll())
-                .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/api/**", "/h2-console/**"))
-                .headers(headers -> headers
-                        .frameOptions(frame -> frame.sameOrigin()));
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+                .csrf(csrf -> csrf.disable());
         return http.build();
     }
 }

@@ -4,12 +4,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.*;
 
 @Controller
-@RequestMapping("/anchorwear")
 public class AnchorWearController {
 
     private static final List<Map<String, Object>> PRODUCTS = new ArrayList<>();
@@ -55,7 +53,7 @@ public class AnchorWearController {
         p.put("name", name);
         p.put("category", category);
         p.put("price", price);
-        p.put("priceFormatted", String.format("R$ %.2f", price).replace('.', ','));
+        p.put("priceFormatted", String.format("R$ %.2f", price).replace('.', ','));
         p.put("description", desc);
         p.put("sizes", sizes);
         p.put("colors", colors);
@@ -65,7 +63,12 @@ public class AnchorWearController {
         return p;
     }
 
-    @GetMapping({"", "/"})
+    @GetMapping("/")
+    public String root() {
+        return "redirect:/anchorwear";
+    }
+
+    @GetMapping({"/anchorwear", "/anchorwear/"})
     public String home(Model model) {
         List<Map<String, Object>> featured = PRODUCTS.subList(0, 4);
         List<Map<String, Object>> newArrivals = PRODUCTS.stream()
@@ -78,14 +81,14 @@ public class AnchorWearController {
         return "anchorwear/index";
     }
 
-    @GetMapping("/shop")
+    @GetMapping("/anchorwear/shop")
     public String shop(Model model) {
         model.addAttribute("products", PRODUCTS);
         model.addAttribute("categories", List.of("Todos", "Camisetas", "Moletons", "Acessórios"));
         return "anchorwear/shop";
     }
 
-    @GetMapping("/produto/{id}")
+    @GetMapping("/anchorwear/produto/{id}")
     public String product(@PathVariable int id, Model model) {
         Optional<Map<String, Object>> product = PRODUCTS.stream()
                 .filter(p -> (int) p.get("id") == id).findFirst();
@@ -99,22 +102,22 @@ public class AnchorWearController {
         return "anchorwear/product";
     }
 
-    @GetMapping("/personalizar")
+    @GetMapping("/anchorwear/personalizar")
     public String personalize(Model model) {
         return "anchorwear/personalize";
     }
 
-    @GetMapping("/sobre")
+    @GetMapping("/anchorwear/sobre")
     public String about(Model model) {
         return "anchorwear/about";
     }
 
-    @GetMapping("/contato")
+    @GetMapping("/anchorwear/contato")
     public String contact(Model model) {
         return "anchorwear/contact";
     }
 
-    @GetMapping("/carrinho")
+    @GetMapping("/anchorwear/carrinho")
     public String cart(Model model) {
         return "anchorwear/cart";
     }
