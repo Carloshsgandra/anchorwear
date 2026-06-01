@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout :: adminLayout('Dashboard', ~{::section}, 'dashboard')}">
+<section th:fragment="content">
+
+  <!-- Flash messages -->
+  <div th:if="${successMsg}" class="aw-alert aw-alert--success" th:text="${successMsg}"></div>
+
+  <!-- Stats cards -->
+  <div class="aw-admin-stats">
+    <div class="aw-admin-stat-card aw-admin-stat-card--blue">
+      <div class="aw-admin-stat-card__value" th:text="${stats.totalOrders}">0</div>
+      <div class="aw-admin-stat-card__label">Total de Pedidos</div>
+      <div class="aw-admin-stat-card__sub" th:text="'Hoje: ' + ${stats.ordersToday}">Hoje: 0</div>
+    </div>
+    <div class="aw-admin-stat-card aw-admin-stat-card--green">
+      <div class="aw-admin-stat-card__value" th:text="${stats.getTotalRevenueFormatted()}">R$ 0,00</div>
+      <div class="aw-admin-stat-card__label">Receita Total</div>
+      <div class="aw-admin-stat-card__sub" th:text="'Este mês: ' + ${stats.getRevenueThisMonthFormatted()}">Mês: R$ 0</div>
+    </div>
+    <div class="aw-admin-stat-card aw-admin-stat-card--orange">
+      <div class="aw-admin-stat-card__value" th:text="${stats.pendingOrders}">0</div>
+      <div class="aw-admin-stat-card__label">Aguardando Pagamento</div>
+      <div class="aw-admin-stat-card__sub">Requer atenção</div>
+    </div>
+    <div class="aw-admin-stat-card aw-admin-stat-card--purple">
+      <div class="aw-admin-stat-card__value" th:text="${stats.totalProducts}">0</div>
+      <div class="aw-admin-stat-card__label">Produtos Ativos</div>
+      <div class="aw-admin-stat-card__sub" th:text="${stats.totalUsers} + ' usuários'">0 usuários</div>
+    </div>
+  </div>
+
+  <!-- Ações rápidas -->
+  <div class="aw-admin-actions" style="margin-bottom:32px;">
+    <a th:href="@{/admin/produtos/novo}" class="aw-btn aw-btn--primary">+ Novo Produto</a>
+    <a th:href="@{/admin/pedidos}" class="aw-btn aw-btn--outline">Ver Pedidos</a>
+  </div>
+
+  <!-- Pedidos recentes -->
+  <div class="aw-admin-card">
+    <div class="aw-admin-card__header">
+      <h2>Pedidos Recentes</h2>
+      <a th:href="@{/admin/pedidos}" class="aw-link">Ver todos →</a>
+    </div>
+    <div th:if="${stats.recentOrders.isEmpty()}" class="aw-empty-state">
+      Nenhum pedido ainda.
+    </div>
+    <div th:if="${!stats.recentOrders.isEmpty()}" class="aw-table-wrap">
+      <table class="aw-table">
+        <thead>
+          <tr><th>#</th><th>Cliente</th><th>Total</th><th>Pagamento</th><th>Status</th><th>Data</th><th></th></tr>
+        </thead>
+        <tbody>
+          <tr th:each="o : ${stats.recentOrders}">
+            <td th:text="'#' + o.id">#1</td>
+            <td th:text="${o.user.name}">Nome</td>
+            <td th:text="${o.totalFormatted}">R$ 0,00</td>
+            <td th:text="${o.paymentMethod}">PIX</td>
+            <td><span class="aw-badge" th:classappend="'aw-badge--' + o.status.cssClass"
+                      th:text="${o.status.label}">Status</span></td>
+            <td th:text="${#temporals.format(o.createdAt,'dd/MM/yyyy HH:mm')}">01/01/2024</td>
+            <td><a th:href="@{/admin/pedido/{id}(id=${o.id})}" class="aw-link">Detalhes</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</section>
+</html>

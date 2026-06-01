@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout(title, content, page)">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:fragment="layout(title, content, page)">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -8,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
   <link rel="stylesheet" th:href="@{/css/anchorwear.css}"/>
+  <link rel="stylesheet" th:href="@{/css/anchorwear-extra.css}"/>
 </head>
 <body class="aw-body">
 
@@ -34,6 +37,16 @@
       🛒
       <span class="aw-nav__cart-count" id="cartCount">0</span>
     </a>
+    <!-- Auth links -->
+    <span sec:authorize="!isAuthenticated()">
+      <a th:href="@{/auth/login}" class="aw-nav__auth-link">Entrar</a>
+    </span>
+    <span sec:authorize="isAuthenticated()" class="aw-nav__user-menu">
+      <a th:href="@{/conta}" class="aw-nav__auth-link" title="Minha Conta">👤</a>
+      <span sec:authorize="hasRole('ADMIN')">
+        <a th:href="@{/admin}" class="aw-nav__auth-link aw-nav__auth-link--admin" title="Admin">⚙️</a>
+      </span>
+    </span>
     <button class="aw-nav__hamburger" onclick="toggleNav()" title="Menu">☰</button>
   </div>
 </nav>
@@ -139,6 +152,18 @@
     document.getElementById('toastMsg').textContent = msg;
     t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 3000);
+  }
+  function addToCartFromBtn(btn) {
+    addToCart(parseInt(btn.dataset.id), btn.dataset.name, parseFloat(btn.dataset.price), 'M', 'Padrão');
+  }
+  function handleAddToCartBtn(btn) {
+    const id = parseInt(btn.dataset.id);
+    const name = btn.dataset.name;
+    const price = parseFloat(btn.dataset.price);
+    const size = document.querySelector('.aw-size-btn.active')?.textContent || 'M';
+    const color = document.querySelector('.aw-color-btn.active')?.textContent || 'Padrão';
+    const qty = parseInt(document.getElementById('qtyVal')?.textContent || '1');
+    for (let i = 0; i < qty; i++) addToCart(id, name, price, size, color);
   }
   function toggleNav() {
     document.getElementById('navLinks').classList.toggle('open');

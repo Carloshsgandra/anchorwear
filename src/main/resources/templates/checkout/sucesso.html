@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{anchorwear/layout :: layout('Pedido Confirmado', ~{::main}, 'checkout')}">
+<main th:fragment="content">
+<div class="aw-section aw-section--light" style="min-height:80vh;padding:60px 0;">
+  <div class="aw-container" style="max-width:680px;">
+
+    <div class="aw-success-card">
+      <div class="aw-success-icon">✓</div>
+      <h1 class="aw-success-title">Pedido Realizado!</h1>
+      <p class="aw-success-sub">Obrigado pela sua compra, <strong th:text="${user.name}">Nome</strong>.</p>
+      <div class="aw-success-order-num" th:text="'Pedido #' + ${order.id}">Pedido #1</div>
+    </div>
+
+    <!-- Status PIX -->
+    <div th:if="${order.paymentMethod == 'PIX'}" class="aw-order-card" style="text-align:center;">
+      <h3 class="aw-order-card__title">Pague via PIX</h3>
+      <p style="color:#555;font-size:14px;margin-bottom:16px;">
+        Chave PIX: <strong>pagamentos@anchorwear.com</strong>
+      </p>
+      <div style="background:#f5f5f5;border-radius:12px;padding:24px;display:inline-block;margin-bottom:16px;">
+        <div style="width:160px;height:160px;background:#0a0a0a;border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-size:12px;text-align:center;">
+          QR Code<br/>PIX<br/><small th:text="'R$ ' + ${order.totalFormatted}">R$ 0,00</small>
+        </div>
+      </div>
+      <p style="color:#888;font-size:13px;">
+        Após o pagamento, seu pedido será confirmado automaticamente.
+      </p>
+      <button onclick="navigator.clipboard.writeText('pagamentos@anchorwear.com').then(()=>showToast('✅','Chave PIX copiada!'))"
+              class="aw-btn aw-btn--outline" style="margin-top:8px;">
+        Copiar Chave PIX
+      </button>
+    </div>
+
+    <!-- Status Cartão/Boleto -->
+    <div th:if="${order.paymentMethod != 'PIX'}" class="aw-order-card" style="text-align:center;">
+      <h3 class="aw-order-card__title">
+        <span th:if="${order.paymentMethod == 'CREDIT_CARD'}">Pagamento com Cartão</span>
+        <span th:if="${order.paymentMethod == 'BOLETO'}">Boleto Bancário</span>
+      </h3>
+      <p style="color:#555;font-size:14px;">
+        <span th:if="${order.paymentMethod == 'BOLETO'}">
+          Seu boleto será gerado e enviado por e-mail em até 30 minutos.
+        </span>
+        <span th:if="${order.paymentMethod == 'CREDIT_CARD'}">
+          Seu pagamento está sendo processado. Você receberá a confirmação por e-mail.
+        </span>
+      </p>
+    </div>
+
+    <!-- Resumo -->
+    <div class="aw-order-card">
+      <h3 class="aw-order-card__title">Resumo do Pedido</h3>
+      <div th:each="item : ${order.items}" class="aw-order-item">
+        <div class="aw-order-item__info">
+          <span class="aw-order-item__name" th:text="${item.productName}">Produto</span>
+          <span class="aw-order-item__meta" th:text="'Tam: ' + ${item.size} + ' · Cor: ' + ${item.color}"></span>
+        </div>
+        <div class="aw-order-item__right">
+          <span style="color:#8a8a8a;font-size:13px;" th:text="'Qtd: ' + ${item.quantity}">Qtd: 1</span>
+          <span class="aw-order-item__price" th:text="${item.totalFormatted}">R$ 0,00</span>
+        </div>
+      </div>
+      <div class="aw-order-summary-row aw-order-summary-row--total" style="margin-top:12px;">
+        <span>Total</span><span th:text="${order.totalFormatted}">R$ 0,00</span>
+      </div>
+    </div>
+
+    <!-- Entrega -->
+    <div class="aw-order-card">
+      <h3 class="aw-order-card__title">Endereço de Entrega</h3>
+      <p th:text="${order.shippingName}" style="font-weight:600;margin-bottom:4px;"></p>
+      <p th:text="${order.shippingAddress}" style="color:#888;font-size:14px;"></p>
+    </div>
+
+    <div style="display:flex;gap:12px;justify-content:center;margin-top:24px;flex-wrap:wrap;">
+      <a th:href="@{/conta/pedido/{id}(id=${order.id})}" class="aw-btn aw-btn--outline">Ver Detalhes do Pedido</a>
+      <a th:href="@{/anchorwear/shop}" class="aw-btn aw-btn--primary" onclick="localStorage.removeItem('aw_cart');">
+        Continuar Comprando
+      </a>
+    </div>
+  </div>
+</div>
+</main>
+</html>

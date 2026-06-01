@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout :: adminLayout('Pedidos', ~{::section}, 'pedidos')}">
+<section th:fragment="content">
+
+  <div th:if="${successMsg}" class="aw-alert aw-alert--success" th:text="${successMsg}"></div>
+
+  <!-- Filtro de status -->
+  <div class="aw-admin-filters">
+    <a th:href="@{/admin/pedidos}" th:classappend="${statusFilter == null} ? 'active'">Todos</a>
+    <a th:each="s : ${statusValues}"
+       th:href="@{/admin/pedidos(status=${s.name()})}"
+       th:classappend="${statusFilter == s.name()} ? 'active'"
+       th:text="${s.label}">Status</a>
+  </div>
+
+  <div class="aw-admin-card">
+    <div th:if="${orders.isEmpty()}" class="aw-empty-state">Nenhum pedido encontrado.</div>
+    <div th:if="${!orders.isEmpty()}" class="aw-table-wrap">
+      <table class="aw-table">
+        <thead>
+          <tr><th>#</th><th>Cliente</th><th>Total</th><th>Pagamento</th><th>Status</th><th>Data</th><th></th></tr>
+        </thead>
+        <tbody>
+          <tr th:each="o : ${orders}">
+            <td th:text="'#' + o.id">#1</td>
+            <td th:text="${o.user.name}">Nome</td>
+            <td th:text="${o.totalFormatted}">R$ 0,00</td>
+            <td th:text="${o.paymentMethod}">PIX</td>
+            <td><span class="aw-badge" th:classappend="'aw-badge--' + o.status.cssClass"
+                      th:text="${o.status.label}">Status</span></td>
+            <td th:text="${#temporals.format(o.createdAt,'dd/MM/yy HH:mm')}">01/01</td>
+            <td><a th:href="@{/admin/pedido/{id}(id=${o.id})}" class="aw-link">Detalhes</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</section>
+</html>

@@ -131,7 +131,10 @@
           <div class="aw-product-card__footer">
             <span class="aw-product-card__price" th:text="${product.priceFormatted}">R$ 0,00</span>
             <button class="aw-product-card__cart"
-                    th:onclick="|addToCart(${product.id}, '${product.name}', ${product.price}, 'M', 'Padrão')|"
+                    th:data-id="${product.id}"
+                    th:data-name="${product.name}"
+                    th:data-price="${product.price}"
+                    onclick="addToCartFromBtn(this)"
                     title="Adicionar ao carrinho">🛒</button>
           </div>
         </div>
@@ -185,7 +188,10 @@
           <div class="aw-product-card__footer">
             <span class="aw-product-card__price" th:text="${product.priceFormatted}">R$ 0,00</span>
             <button class="aw-product-card__cart"
-                    th:onclick="|addToCart(${product.id}, '${product.name}', ${product.price}, 'M', 'Padrão')|"
+                    th:data-id="${product.id}"
+                    th:data-name="${product.name}"
+                    th:data-price="${product.price}"
+                    onclick="addToCartFromBtn(this)"
                     title="Adicionar ao carrinho">🛒</button>
           </div>
         </div>

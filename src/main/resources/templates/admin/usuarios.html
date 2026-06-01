@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout :: adminLayout('Usuários', ~{::section}, 'usuarios')}">
+<section th:fragment="content">
+
+  <div th:if="${successMsg}" class="aw-alert aw-alert--success" th:text="${successMsg}"></div>
+
+  <div style="margin-bottom:16px;color:#888;" th:text="${users.size()} + ' usuários cadastrados'">0 usuários</div>
+
+  <div class="aw-admin-card">
+    <div class="aw-table-wrap">
+      <table class="aw-table">
+        <thead>
+          <tr><th>ID</th><th>Nome</th><th>E-mail</th><th>Telefone</th><th>Papel</th><th>Cadastro</th><th>Status</th><th>Ações</th></tr>
+        </thead>
+        <tbody>
+          <tr th:each="u : ${users}" th:classappend="${!u.active} ? 'aw-row--inactive'">
+            <td th:text="${u.id}">1</td>
+            <td>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <div style="width:32px;height:32px;border-radius:50%;background:#0d2b5e;display:flex;align-items:center;justify-content:center;color:white;font-size:13px;font-weight:700;"
+                     th:text="${#strings.substring(u.name,0,1)}">U</div>
+                <span th:text="${u.name}">Nome</span>
+              </div>
+            </td>
+            <td th:text="${u.email}">email</td>
+            <td th:text="${u.phone ?: '—'}">—</td>
+            <td>
+              <span class="aw-badge" th:if="${u.role.name() == 'ADMIN'}"
+                    style="background:#fff3e0;color:#e65100;">Admin</span>
+              <span class="aw-badge" th:if="${u.role.name() == 'USER'}"
+                    style="background:#e8f5e9;color:#1b5e20;">Cliente</span>
+            </td>
+            <td th:text="${#temporals.format(u.createdAt,'dd/MM/yyyy')}">01/01/2024</td>
+            <td>
+              <span class="aw-badge" th:if="${u.active}" style="background:#e8f5e9;color:#2e7d32;">Ativo</span>
+              <span class="aw-badge" th:if="${!u.active}" style="background:#fce4ec;color:#c62828;">Inativo</span>
+            </td>
+            <td>
+              <form th:action="@{/admin/usuarios/{id}/toggle(id=${u.id})}" method="post" style="display:inline;"
+                    th:if="${u.role.name() != 'ADMIN'}">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <button type="submit" class="aw-btn-link" th:text="${u.active ? 'Desativar' : 'Ativar'}">Toggle</button>
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</section>
+</html>

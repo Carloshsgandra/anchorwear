@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{anchorwear/layout :: layout('Pedido', ~{::main}, 'conta')}">
+<main th:fragment="content">
+<div class="aw-section aw-section--light" style="min-height:80vh;padding:60px 0;">
+  <div class="aw-container">
+    <div class="aw-account-layout">
+      <aside class="aw-account-sidebar">
+        <div class="aw-account-avatar"><span th:text="${#strings.substring(user.name,0,1)}">U</span></div>
+        <p class="aw-account-name" th:text="${user.name}">Nome</p>
+        <p class="aw-account-email" th:text="${user.email}">email</p>
+        <nav class="aw-account-nav">
+          <a th:href="@{/conta}">Dashboard</a>
+          <a th:href="@{/conta/pedidos}" class="active">Meus Pedidos</a>
+          <a th:href="@{/conta/perfil}">Meu Perfil</a>
+          <a th:href="@{/anchorwear/shop}">Continuar Comprando</a>
+          <a th:href="@{/auth/logout}" class="aw-account-logout">Sair</a>
+        </nav>
+      </aside>
+      <div class="aw-account-content">
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;">
+          <a th:href="@{/conta/pedidos}" class="aw-link">← Voltar</a>
+          <h2 class="aw-account-heading" style="margin:0;" th:text="'Pedido #' + ${order.id}">Pedido #1</h2>
+          <span class="aw-badge" th:classappend="'aw-badge--' + order.status.cssClass"
+                th:text="${order.status.label}">Status</span>
+        </div>
+
+        <!-- Itens -->
+        <div class="aw-order-card">
+          <h3 class="aw-order-card__title">Itens do Pedido</h3>
+          <div th:each="item : ${order.items}" class="aw-order-item">
+            <div class="aw-order-item__info">
+              <span class="aw-order-item__name" th:text="${item.productName}">Produto</span>
+              <span class="aw-order-item__meta"
+                    th:text="'Tam: ' + ${item.size} + ' · Cor: ' + ${item.color}">Tam: M · Cor: Preto</span>
+            </div>
+            <div class="aw-order-item__right">
+              <span th:text="'Qtd: ' + ${item.quantity}" style="color:#8a8a8a;font-size:13px;">Qtd: 1</span>
+              <span class="aw-order-item__price" th:text="${item.totalFormatted}">R$ 0,00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Resumo financeiro -->
+        <div class="aw-order-card">
+          <h3 class="aw-order-card__title">Resumo</h3>
+          <div class="aw-order-summary-row"><span>Subtotal</span><span th:text="${order.subtotalFormatted}">R$ 0,00</span></div>
+          <div class="aw-order-summary-row" th:if="${order.discount.compareTo(T(java.math.BigDecimal).ZERO) > 0}">
+            <span>Desconto <span th:if="${order.couponCode}" th:text="'(' + order.couponCode + ')'"></span></span>
+            <span style="color:#4CAF50;" th:text="'- ' + order.discountFormatted">- R$ 0,00</span>
+          </div>
+          <div class="aw-order-summary-row"><span>Frete</span><span th:text="${order.shippingFormatted}">R$ 0,00</span></div>
+          <div class="aw-order-summary-row aw-order-summary-row--total">
+            <span>Total</span><span th:text="${order.totalFormatted}">R$ 0,00</span>
+          </div>
+        </div>
+
+        <!-- Endereço de entrega -->
+        <div class="aw-order-card">
+          <h3 class="aw-order-card__title">Endereço de Entrega</h3>
+          <p th:text="${order.shippingName}" style="font-weight:600;margin-bottom:4px;">Nome</p>
+          <p th:text="${order.shippingAddress}" style="color:#aaa;font-size:14px;">Endereço</p>
+        </div>
+
+        <!-- Pagamento e rastreio -->
+        <div class="aw-order-card">
+          <h3 class="aw-order-card__title">Pagamento &amp; Rastreio</h3>
+          <div class="aw-order-summary-row">
+            <span>Método</span>
+            <span th:text="${order.paymentMethod}">PIX</span>
+          </div>
+          <div class="aw-order-summary-row" th:if="${order.trackingCode}">
+            <span>Código de Rastreio</span>
+            <span th:text="${order.trackingCode}" style="font-family:monospace;color:#c8a96e;">BR0000000000</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+</html>

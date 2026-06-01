@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{anchorwear/layout :: layout('Meus Pedidos', ~{::main}, 'conta')}">
+<main th:fragment="content">
+<div class="aw-section aw-section--light" style="min-height:80vh;padding:60px 0;">
+  <div class="aw-container">
+    <div class="aw-account-layout">
+      <aside class="aw-account-sidebar">
+        <div class="aw-account-avatar"><span th:text="${#strings.substring(user.name,0,1)}">U</span></div>
+        <p class="aw-account-name" th:text="${user.name}">Nome</p>
+        <p class="aw-account-email" th:text="${user.email}">email</p>
+        <nav class="aw-account-nav">
+          <a th:href="@{/conta}">Dashboard</a>
+          <a th:href="@{/conta/pedidos}" class="active">Meus Pedidos</a>
+          <a th:href="@{/conta/perfil}">Meu Perfil</a>
+          <a th:href="@{/anchorwear/shop}">Continuar Comprando</a>
+          <a th:href="@{/auth/logout}" class="aw-account-logout">Sair</a>
+        </nav>
+      </aside>
+      <div class="aw-account-content">
+        <h2 class="aw-account-heading">Meus Pedidos</h2>
+        <div th:if="${orders.isEmpty()}" class="aw-empty-state">
+          <p>Nenhum pedido encontrado.</p>
+          <a th:href="@{/anchorwear/shop}" class="aw-btn aw-btn--primary" style="margin-top:16px;">Ir para a Loja</a>
+        </div>
+        <div th:if="${!orders.isEmpty()}" class="aw-table-wrap">
+          <table class="aw-table">
+            <thead>
+              <tr><th>Pedido</th><th>Data</th><th>Itens</th><th>Total</th><th>Status</th><th></th></tr>
+            </thead>
+            <tbody>
+              <tr th:each="o : ${orders}">
+                <td th:text="'#' + o.id">#1</td>
+                <td th:text="${#temporals.format(o.createdAt,'dd/MM/yyyy')}">01/01/2024</td>
+                <td th:text="${o.items.size()}">1</td>
+                <td th:text="${o.totalFormatted}">R$ 0,00</td>
+                <td><span class="aw-badge" th:classappend="'aw-badge--' + o.status.cssClass"
+                          th:text="${o.status.label}">Status</span></td>
+                <td><a th:href="@{/conta/pedido/{id}(id=${o.id})}" class="aw-link">Detalhes</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{anchorwear/layout :: layout('Meu Perfil', ~{::main}, 'conta')}">
+<main th:fragment="content">
+<div class="aw-section aw-section--light" style="min-height:80vh;padding:60px 0;">
+  <div class="aw-container">
+    <div class="aw-account-layout">
+      <aside class="aw-account-sidebar">
+        <div class="aw-account-avatar"><span th:text="${#strings.substring(user.name,0,1)}">U</span></div>
+        <p class="aw-account-name" th:text="${user.name}">Nome</p>
+        <p class="aw-account-email" th:text="${user.email}">email</p>
+        <nav class="aw-account-nav">
+          <a th:href="@{/conta}">Dashboard</a>
+          <a th:href="@{/conta/pedidos}">Meus Pedidos</a>
+          <a th:href="@{/conta/perfil}" class="active">Meu Perfil</a>
+          <a th:href="@{/anchorwear/shop}">Continuar Comprando</a>
+          <a th:href="@{/auth/logout}" class="aw-account-logout">Sair</a>
+        </nav>
+      </aside>
+      <div class="aw-account-content">
+        <h2 class="aw-account-heading">Meu Perfil</h2>
+
+        <div th:if="${successMsg}" class="aw-alert aw-alert--success" th:text="${successMsg}"></div>
+
+        <form th:action="@{/conta/perfil}" method="post" class="aw-order-card">
+          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+          <h3 class="aw-order-card__title">Dados Pessoais</h3>
+          <div class="aw-form__group">
+            <label class="aw-form__label">Nome completo</label>
+            <input type="text" name="name" class="aw-form__input" th:value="${user.name}" required/>
+          </div>
+          <div class="aw-form__group">
+            <label class="aw-form__label">E-mail</label>
+            <input type="email" class="aw-form__input" th:value="${user.email}" disabled
+                   style="opacity:0.5;cursor:not-allowed;"/>
+            <small style="color:#8a8a8a;">E-mail não pode ser alterado.</small>
+          </div>
+          <div class="aw-form__group">
+            <label class="aw-form__label">Telefone</label>
+            <input type="tel" name="phone" class="aw-form__input" th:value="${user.phone}"
+                   placeholder="(11) 99999-9999"/>
+          </div>
+          <div class="aw-form__group">
+            <label class="aw-form__label">CPF</label>
+            <input type="text" name="cpf" class="aw-form__input" th:value="${user.cpf}"
+                   placeholder="000.000.000-00"/>
+          </div>
+          <button type="submit" class="aw-btn aw-btn--primary">Salvar alterações</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+</html>

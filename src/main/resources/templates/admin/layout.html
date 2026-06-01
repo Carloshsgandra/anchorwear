@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="adminLayout(title, content, adminPage)">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title th:text="${title} + ' — Admin · Anchor Wear'">Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="stylesheet" th:href="@{/css/anchorwear.css}"/>
+  <link rel="stylesheet" th:href="@{/css/anchorwear-extra.css}"/>
+</head>
+<body class="aw-admin-body">
+
+<div class="aw-admin-layout">
+  <!-- Sidebar -->
+  <aside class="aw-admin-sidebar">
+    <a th:href="@{/admin}" class="aw-admin-brand">ANCHOR<span>.</span>WEAR<small>ADMIN</small></a>
+    <nav class="aw-admin-nav">
+      <a th:href="@{/admin}" th:classappend="${adminPage == 'dashboard'} ? 'active'">
+        <span class="aw-admin-nav__icon">📊</span> Dashboard
+      </a>
+      <a th:href="@{/admin/pedidos}" th:classappend="${adminPage == 'pedidos'} ? 'active'">
+        <span class="aw-admin-nav__icon">📦</span> Pedidos
+      </a>
+      <a th:href="@{/admin/produtos}" th:classappend="${adminPage == 'produtos'} ? 'active'">
+        <span class="aw-admin-nav__icon">👕</span> Produtos
+      </a>
+      <a th:href="@{/admin/usuarios}" th:classappend="${adminPage == 'usuarios'} ? 'active'">
+        <span class="aw-admin-nav__icon">👤</span> Usuários
+      </a>
+      <div class="aw-admin-nav__divider"></div>
+      <a th:href="@{/anchorwear}" target="_blank">
+        <span class="aw-admin-nav__icon">🛍️</span> Ver Loja
+      </a>
+      <a th:href="@{/auth/logout}">
+        <span class="aw-admin-nav__icon">🚪</span> Sair
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <div class="aw-admin-main">
+    <header class="aw-admin-header">
+      <h1 class="aw-admin-header__title" th:text="${title}">Admin</h1>
+      <span class="aw-admin-header__badge">Admin</span>
+    </header>
+    <div class="aw-admin-content" th:replace="${content}"></div>
+  </div>
+</div>
+
+<!-- Toast reutilizado -->
+<div class="aw-toast" id="toast">
+  <span class="aw-toast__icon" id="toastIcon"></span>
+  <span id="toastMsg"></span>
+</div>
+<script>
+  function showToast(icon, msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toastIcon').textContent = icon;
+    document.getElementById('toastMsg').textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+</script>
+</body>
+</html>

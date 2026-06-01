@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Criar Conta — Anchor Wear Oficial</title>
+  <link rel="stylesheet" th:href="@{/css/anchorwear.css}"/>
+  <link rel="stylesheet" th:href="@{/css/anchorwear-extra.css}"/>
+</head>
+<body class="aw-body aw-auth-page">
+
+<div class="aw-auth-container">
+  <a th:href="@{/anchorwear}" class="aw-auth-logo">ANCHOR<span>.</span>WEAR</a>
+  <h1 class="aw-auth-title">Criar conta</h1>
+  <p class="aw-auth-sub">Rápido e gratuito</p>
+
+  <div th:if="${errorMsg}" class="aw-alert aw-alert--error" th:text="${errorMsg}"></div>
+
+  <form th:action="@{/auth/registrar}" method="post" th:object="${form}" class="aw-auth-form">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+    <div class="aw-form__group">
+      <label class="aw-form__label">Nome completo</label>
+      <input type="text" th:field="*{name}" class="aw-form__input" placeholder="Seu nome" required/>
+      <span class="aw-form__error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+    </div>
+
+    <div class="aw-form__group">
+      <label class="aw-form__label">E-mail</label>
+      <input type="email" th:field="*{email}" class="aw-form__input" placeholder="seu@email.com" required/>
+      <span class="aw-form__error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+    </div>
+
+    <div class="aw-form__group">
+      <label class="aw-form__label">Telefone (opcional)</label>
+      <input type="tel" th:field="*{phone}" class="aw-form__input" placeholder="(11) 99999-9999"/>
+    </div>
+
+    <div class="aw-form__group">
+      <label class="aw-form__label">Senha</label>
+      <input type="password" th:field="*{password}" class="aw-form__input" placeholder="Mínimo 6 caracteres" required/>
+      <span class="aw-form__error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+    </div>
+
+    <div class="aw-form__group">
+      <label class="aw-form__label">Confirmar senha</label>
+      <input type="password" th:field="*{confirmPassword}" class="aw-form__input" placeholder="Repita a senha" required/>
+    </div>
+
+    <button type="submit" class="aw-btn aw-btn--primary" style="width:100%;padding:14px;">Criar conta</button>
+  </form>
+
+  <p class="aw-auth-switch">
+    Já tem conta? <a th:href="@{/auth/login}">Entrar</a>
+  </p>
+</div>
+
+</body>
+</html>

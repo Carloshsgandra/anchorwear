@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{anchorwear/layout :: layout('Minha Conta', ~{::main}, 'conta')}">
+<main th:fragment="content">
+<div class="aw-section aw-section--light" style="min-height:80vh;padding:60px 0;">
+  <div class="aw-container">
+    <div class="aw-account-layout">
+
+      <!-- Sidebar -->
+      <aside class="aw-account-sidebar">
+        <div class="aw-account-avatar">
+          <span th:text="${#strings.substring(user.name, 0, 1)}">U</span>
+        </div>
+        <p class="aw-account-name" th:text="${user.name}">Nome</p>
+        <p class="aw-account-email" th:text="${user.email}">email</p>
+        <nav class="aw-account-nav">
+          <a th:href="@{/conta}" class="active">Dashboard</a>
+          <a th:href="@{/conta/pedidos}">Meus Pedidos</a>
+          <a th:href="@{/conta/perfil}">Meu Perfil</a>
+          <a th:href="@{/anchorwear/shop}">Continuar Comprando</a>
+          <a th:href="@{/auth/logout}" class="aw-account-logout">Sair</a>
+        </nav>
+      </aside>
+
+      <!-- Content -->
+      <div class="aw-account-content">
+        <h2 class="aw-account-heading">Olá, <span th:text="${user.name}">Nome</span>!</h2>
+
+        <div class="aw-stats-grid" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:32px;">
+          <div class="aw-stat-card">
+            <div class="aw-stat-card__value" th:text="${totalOrders}">0</div>
+            <div class="aw-stat-card__label">Pedidos</div>
+          </div>
+          <div class="aw-stat-card">
+            <div class="aw-stat-card__value"
+                 th:text="${orders.stream().filter(o -> o.status.name() == 'DELIVERED').count()}">0</div>
+            <div class="aw-stat-card__label">Entregues</div>
+          </div>
+          <div class="aw-stat-card">
+            <div class="aw-stat-card__value"
+                 th:text="${orders.stream().filter(o -> o.status.name() == 'PENDING' || o.status.name() == 'PROCESSING' || o.status.name() == 'SHIPPED').count()}">0</div>
+            <div class="aw-stat-card__label">Em andamento</div>
+          </div>
+        </div>
+
+        <h3 style="font-family:'Space Grotesk',sans-serif;margin-bottom:16px;">Pedidos Recentes</h3>
+        <div th:if="${orders.isEmpty()}" class="aw-empty-state">
+          <p>Você ainda não fez nenhum pedido.</p>
+          <a th:href="@{/anchorwear/shop}" class="aw-btn aw-btn--primary" style="margin-top:16px;">Explorar Loja</a>
+        </div>
+        <div th:if="${!orders.isEmpty()}" class="aw-table-wrap">
+          <table class="aw-table">
+            <thead>
+              <tr><th>Pedido</th><th>Data</th><th>Total</th><th>Status</th><th></th></tr>
+            </thead>
+            <tbody>
+              <tr th:each="o, i : ${orders}" th:if="${i.index < 5}">
+                <td th:text="'#' + o.id">#1</td>
+                <td th:text="${#temporals.format(o.createdAt,'dd/MM/yyyy')}">01/01/2024</td>
+                <td th:text="${o.totalFormatted}">R$ 0,00</td>
+                <td><span class="aw-badge" th:classappend="'aw-badge--' + o.status.cssClass"
+                          th:text="${o.status.label}">Status</span></td>
+                <td><a th:href="@{/conta/pedido/{id}(id=${o.id})}" class="aw-link">Ver</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div th:if="${orders.size() > 5}" style="margin-top:16px;">
+          <a th:href="@{/conta/pedidos}" class="aw-btn aw-btn--outline">Ver todos os pedidos</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+</html>

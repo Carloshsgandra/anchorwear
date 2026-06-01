@@ -92,7 +92,10 @@
         <!-- Add to Cart -->
         <div class="aw-add-to-cart" style="margin-top:20px;">
           <button class="aw-btn aw-btn--primary aw-btn--full aw-btn--lg" style="flex:1;"
-                  th:onclick="|handleAddToCart(${product.id}, '${product.name}', ${product.price})|">
+                  th:data-id="${product.id}"
+                  th:data-name="${product.name}"
+                  th:data-price="${product.price}"
+                  onclick="handleAddToCartBtn(this)">
             🛒 Adicionar ao Carrinho
           </button>
           <button class="aw-btn aw-btn--outline" style="min-width:56px;padding:0;display:flex;align-items:center;justify-content:center;font-size:20px;" title="Favoritar">♡</button>
@@ -183,7 +186,10 @@
             <div class="aw-product-card__footer">
               <span class="aw-product-card__price" th:text="${rel.priceFormatted}">R$ 0,00</span>
               <button class="aw-product-card__cart"
-                      th:onclick="|addToCart(${rel.id}, '${rel.name}', ${rel.price}, 'M', 'Padrão')|"
+                      th:data-id="${rel.id}"
+                      th:data-name="${rel.name}"
+                      th:data-price="${rel.price}"
+                      onclick="addToCartFromBtn(this)"
                       title="Adicionar ao carrinho">🛒</button>
             </div>
           </div>
