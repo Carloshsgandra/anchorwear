@@ -178,15 +178,19 @@
       return;
     }
 
-    container.innerHTML = cartData.map(i =>
-      `<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee;font-size:14px;">
-        <div>
-          <strong>${i.name}</strong>
-          <div style="color:#888;font-size:12px;">${i.size || ''} · ${i.color || ''} · Qtd: ${i.qty}</div>
-        </div>
-        <span>R$ ${((i.price || 0) * (i.qty || 1)).toFixed(2).replace('.', ',')}</span>
-      </div>`
-    ).join('');
+    container.innerHTML = cartData.map(i => {
+      const imgHtml = i.imageUrl
+        ? '<img src="' + i.imageUrl + '" alt="' + i.name + '" style="width:52px;height:60px;object-fit:cover;border-radius:6px;flex-shrink:0;"/>'
+        : '<div style="width:52px;height:60px;background:#f0f0f0;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;opacity:0.4;">⚓</div>';
+      return '<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #eee;">'
+        + imgHtml
+        + '<div style="flex:1;min-width:0;">'
+        + '<div style="font-size:13px;font-weight:600;color:#0a0a0a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + i.name + '</div>'
+        + '<div style="font-size:11px;color:#888;margin-top:2px;">' + (i.size || '') + ' · ' + (i.color || '') + ' · Qtd: ' + (i.qty || 1) + '</div>'
+        + '</div>'
+        + '<div style="font-size:13px;font-weight:700;color:#0a0a0a;white-space:nowrap;">R$ ' + ((parseFloat(i.price)||0)*(parseInt(i.qty)||1)).toFixed(2).replace('.', ',') + '</div>'
+        + '</div>';
+    }).join('');
 
     updateTotals();
   }

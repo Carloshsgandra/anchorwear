@@ -137,14 +137,18 @@
     document.querySelectorAll('#cartCount').forEach(el => el.textContent = count);
   }
 
-  /* addToCart — aceita qty opcional, mostra apenas 1 toast */
-  function addToCart(id, name, price, size, color, qty) {
+  /* addToCart — aceita qty e imageUrl opcionais, mostra apenas 1 toast */
+  function addToCart(id, name, price, size, color, qty, imageUrl) {
     qty = Math.max(1, parseInt(qty) || 1);
     const cart = getCart();
     const key = id + '-' + size + '-' + color;
     const existing = cart.find(i => i.key === key);
-    if (existing) { existing.qty = (existing.qty || 1) + qty; }
-    else { cart.push({ key, id, name, price, size, color, qty }); }
+    if (existing) {
+      existing.qty = (existing.qty || 1) + qty;
+      if (imageUrl) existing.imageUrl = imageUrl;
+    } else {
+      cart.push({ key, id, name, price, size, color, qty, imageUrl: imageUrl || '' });
+    }
     saveCart(cart);
     showToast('✅', name + ' adicionado ao carrinho!');
   }
@@ -154,8 +158,9 @@
     const id = parseInt(btn.dataset.id);
     const name = btn.dataset.name;
     const price = parseFloat(btn.dataset.price);
+    const imageUrl = btn.dataset.image || '';
     if (!id || !name || isNaN(price)) return;
-    addToCart(id, name, price, 'M', 'Padrão', 1);
+    addToCart(id, name, price, 'M', 'Padrão', 1, imageUrl);
   }
 
   /* Toast */

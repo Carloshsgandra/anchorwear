@@ -5,96 +5,154 @@
 
   <div th:if="${errorMsg}" class="aw-alert aw-alert--error" th:text="${errorMsg}"></div>
 
-  <div class="aw-admin-card" style="max-width:760px;">
-    <form th:action="${editMode ? '/admin/produtos/' + productId + '/editar' : '/admin/produtos/novo'}"
-          method="post" th:object="${form}">
-      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+  <div style="display:grid;grid-template-columns:1fr 300px;gap:24px;align-items:start;max-width:1000px;">
 
-      <div class="aw-form__row">
-        <div class="aw-form__group" style="flex:1;">
-          <label class="aw-form__label">Nome do produto *</label>
-          <input type="text" th:field="*{name}" class="aw-form__input" required
-                 oninput="autoSlug(this.value)"/>
-          <span class="aw-form__error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
-        </div>
-        <div class="aw-form__group" style="flex:0 0 200px;">
-          <label class="aw-form__label">Slug (URL) *</label>
-          <input type="text" th:field="*{slug}" class="aw-form__input" id="slugField" required/>
-          <span class="aw-form__error" th:if="${#fields.hasErrors('slug')}" th:errors="*{slug}"></span>
-        </div>
-      </div>
+    <!-- Formulário principal -->
+    <div class="aw-admin-card">
+      <form th:action="${editMode ? '/admin/produtos/' + productId + '/editar' : '/admin/produtos/novo'}"
+            method="post" th:object="${form}" id="productForm">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
-      <div class="aw-form__row">
-        <div class="aw-form__group" style="flex:1;">
-          <label class="aw-form__label">Categoria *</label>
-          <select th:field="*{category}" class="aw-form__input">
-            <option value="">Selecione</option>
-            <option value="Camisetas">Camisetas</option>
-            <option value="Moletons">Moletons</option>
-            <option value="Acessórios">Acessórios</option>
-          </select>
-          <span class="aw-form__error" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></span>
+        <div class="aw-form__row">
+          <div class="aw-form__group" style="flex:1;">
+            <label class="aw-form__label">Nome do produto *</label>
+            <input type="text" th:field="*{name}" class="aw-form__input" required
+                   oninput="autoSlug(this.value)"/>
+            <span class="aw-form__error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+          </div>
+          <div class="aw-form__group" style="flex:0 0 180px;">
+            <label class="aw-form__label">Slug (URL) *</label>
+            <input type="text" th:field="*{slug}" class="aw-form__input" id="slugField" required/>
+            <span class="aw-form__error" th:if="${#fields.hasErrors('slug')}" th:errors="*{slug}"></span>
+          </div>
         </div>
-        <div class="aw-form__group" style="flex:0 0 150px;">
-          <label class="aw-form__label">Preço (R$) *</label>
-          <input type="number" th:field="*{price}" class="aw-form__input" step="0.01" min="0.01" required/>
-          <span class="aw-form__error" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></span>
-        </div>
-        <div class="aw-form__group" style="flex:0 0 120px;">
-          <label class="aw-form__label">Estoque</label>
-          <input type="number" th:field="*{stock}" class="aw-form__input" min="0"/>
-        </div>
-      </div>
 
-      <div class="aw-form__group">
-        <label class="aw-form__label">Descrição</label>
-        <textarea th:field="*{description}" class="aw-form__input" rows="3"></textarea>
-      </div>
-
-      <div class="aw-form__row">
-        <div class="aw-form__group" style="flex:1;">
-          <label class="aw-form__label">Tamanhos (separados por vírgula)</label>
-          <input type="text" th:field="*{sizesRaw}" class="aw-form__input" placeholder="P, M, G, GG, XG"/>
+        <div class="aw-form__row">
+          <div class="aw-form__group" style="flex:1;">
+            <label class="aw-form__label">Categoria *</label>
+            <select th:field="*{category}" class="aw-form__input">
+              <option value="">Selecione</option>
+              <option value="Camisetas">Camisetas</option>
+              <option value="Moletons">Moletons</option>
+              <option value="Acessórios">Acessórios</option>
+            </select>
+            <span class="aw-form__error" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></span>
+          </div>
+          <div class="aw-form__group" style="flex:0 0 140px;">
+            <label class="aw-form__label">Preço (R$) *</label>
+            <input type="number" th:field="*{price}" class="aw-form__input" step="0.01" min="0.01" required/>
+            <span class="aw-form__error" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></span>
+          </div>
+          <div class="aw-form__group" style="flex:0 0 100px;">
+            <label class="aw-form__label">Estoque</label>
+            <input type="number" th:field="*{stock}" class="aw-form__input" min="0"/>
+          </div>
         </div>
-        <div class="aw-form__group" style="flex:1;">
-          <label class="aw-form__label">Cores (separadas por vírgula)</label>
-          <input type="text" th:field="*{colorsRaw}" class="aw-form__input" placeholder="Preto, Branco, Cinza"/>
-        </div>
-      </div>
 
-      <div class="aw-form__row">
-        <div class="aw-form__group" style="flex:1;">
+        <div class="aw-form__group">
+          <label class="aw-form__label">Descrição</label>
+          <textarea th:field="*{description}" class="aw-form__input" rows="3"
+                    placeholder="Descreva o material, corte, diferenciais..."></textarea>
+        </div>
+
+        <div class="aw-form__row">
+          <div class="aw-form__group" style="flex:1;">
+            <label class="aw-form__label">Tamanhos (vírgula)</label>
+            <input type="text" th:field="*{sizesRaw}" class="aw-form__input" placeholder="P, M, G, GG, XG"/>
+          </div>
+          <div class="aw-form__group" style="flex:1;">
+            <label class="aw-form__label">Cores (vírgula)</label>
+            <input type="text" th:field="*{colorsRaw}" class="aw-form__input" placeholder="Preto, Branco, Cinza"/>
+          </div>
+        </div>
+
+        <!-- Imagem -->
+        <div class="aw-form__group">
           <label class="aw-form__label">URL da Imagem</label>
-          <input type="text" th:field="*{imageUrl}" class="aw-form__input" placeholder="https://..."/>
+          <div style="display:flex;gap:8px;">
+            <input type="text" th:field="*{imageUrl}" class="aw-form__input" id="imageUrlInput"
+                   placeholder="https://exemplo.com/imagem.jpg"
+                   oninput="previewImage(this.value)" style="flex:1;"/>
+            <button type="button" class="aw-btn aw-btn--outline" onclick="testImageUrl()"
+                    style="white-space:nowrap;">Testar</button>
+          </div>
+          <small style="color:#888;font-size:11px;margin-top:4px;display:block;">
+            💡 Use <a href="https://imgur.com" target="_blank">Imgur</a>,
+            <a href="https://cloudinary.com" target="_blank">Cloudinary</a> ou qualquer host de imagens.
+            Formatos: JPG, PNG, WebP. Tamanho ideal: 600×750px.
+          </small>
         </div>
-        <div class="aw-form__group" style="flex:0 0 150px;">
-          <label class="aw-form__label">Cor de fundo (CSS)</label>
-          <input type="text" th:field="*{bgColor}" class="aw-form__input" placeholder="#1a1a1a"/>
-        </div>
-        <div class="aw-form__group" style="flex:0 0 130px;">
-          <label class="aw-form__label">Badge</label>
-          <select th:field="*{badge}" class="aw-form__input">
-            <option value="">Nenhum</option>
-            <option value="new">Novo</option>
-            <option value="bestseller">Mais Vendido</option>
-          </select>
-        </div>
-      </div>
 
-      <label style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;margin:16px 0;">
-        <input type="checkbox" th:field="*{active}"/> Produto ativo (visível na loja)
-      </label>
+        <div class="aw-form__row">
+          <div class="aw-form__group" style="flex:1;">
+            <label class="aw-form__label">Cor de fundo (CSS) — usada sem imagem</label>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <input type="color" th:value="${form.bgColor}" id="colorPicker"
+                     oninput="document.getElementById('bgColorInput').value=this.value;previewBg(this.value)"
+                     style="width:44px;height:44px;border:none;cursor:pointer;border-radius:6px;padding:2px;"/>
+              <input type="text" th:field="*{bgColor}" class="aw-form__input" id="bgColorInput"
+                     placeholder="#1a1a1a" oninput="syncColorPicker(this.value)"
+                     style="font-family:monospace;"/>
+            </div>
+          </div>
+          <div class="aw-form__group" style="flex:0 0 140px;">
+            <label class="aw-form__label">Badge</label>
+            <select th:field="*{badge}" class="aw-form__input">
+              <option value="">Nenhum</option>
+              <option value="new">Novo</option>
+              <option value="bestseller">Mais Vendido</option>
+            </select>
+          </div>
+        </div>
 
-      <div style="display:flex;gap:12px;margin-top:8px;">
-        <button type="submit" class="aw-btn aw-btn--primary">
-          <span th:text="${editMode ? 'Salvar Alterações' : 'Criar Produto'}">Salvar</span>
-        </button>
-        <a th:href="@{/admin/produtos}" class="aw-btn aw-btn--outline">Cancelar</a>
+        <label style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;margin:16px 0;">
+          <input type="checkbox" th:field="*{active}"/> Produto ativo (visível na loja)
+        </label>
+
+        <div style="display:flex;gap:12px;margin-top:8px;">
+          <button type="submit" class="aw-btn aw-btn--primary">
+            <span th:text="${editMode ? 'Salvar Alterações' : 'Criar Produto'}">Salvar</span>
+          </button>
+          <a th:href="@{/admin/produtos}" class="aw-btn aw-btn--outline">Cancelar</a>
+        </div>
+      </form>
+    </div>
+
+    <!-- Preview do produto -->
+    <div>
+      <div class="aw-admin-card" style="position:sticky;top:80px;">
+        <h3 class="aw-admin-card__subtitle">Preview do Produto</h3>
+
+        <!-- Preview de imagem -->
+        <div id="imgPreview" style="width:100%;aspect-ratio:3/4;border-radius:8px;overflow:hidden;background:#1a1a1a;display:flex;align-items:center;justify-content:center;margin-bottom:16px;position:relative;">
+          <img id="previewImg"
+               th:if="${form.imageUrl != null and !form.imageUrl.isEmpty()}"
+               th:src="${form.imageUrl}"
+               style="width:100%;height:100%;object-fit:cover;display:block;"
+               onerror="this.style.display='none';document.getElementById('previewPlaceholder').style.display='flex'"/>
+          <div id="previewPlaceholder"
+               th:style="'display:' + (${form.imageUrl == null or form.imageUrl.isEmpty()} ? 'flex' : 'none') + ';flex-direction:column;align-items:center;justify-content:center;gap:8px;'"
+               style="position:absolute;inset:0;flex-direction:column;align-items:center;justify-content:center;gap:8px;">
+            <span style="font-size:60px;opacity:0.15;">⚓</span>
+            <span style="font-size:11px;color:#666;font-family:Space Grotesk,sans-serif;">Sem imagem</span>
+          </div>
+        </div>
+
+        <!-- Info do produto -->
+        <div style="font-size:12px;color:#888;font-family:Space Grotesk,sans-serif;text-transform:uppercase;letter-spacing:0.5px;" id="previewCategory">Categoria</div>
+        <div style="font-size:15px;font-weight:700;color:#0a0a0a;margin:4px 0;" id="previewName">Nome do Produto</div>
+        <div style="font-size:18px;font-weight:700;color:#0d2b5e;" id="previewPrice">R$ 0,00</div>
+
+        <hr style="margin:16px 0;border:none;border-top:1px solid #eee;"/>
+        <p style="font-size:11px;color:#aaa;text-align:center;">
+          Preview em tempo real — salve para aplicar na loja
+        </p>
       </div>
-    </form>
+    </div>
   </div>
 
 <script>
+  /* Auto-slug */
   function autoSlug(name) {
     if (document.getElementById('slugField').dataset.touched) return;
     const slug = name.toLowerCase()
@@ -108,6 +166,68 @@
   document.getElementById('slugField').addEventListener('input', function() {
     this.dataset.touched = 'true';
   });
+
+  /* Sync color picker <-> text input */
+  function syncColorPicker(val) {
+    if (/^#[0-9a-fA-F]{6}$/.test(val)) {
+      document.getElementById('colorPicker').value = val;
+      previewBg(val);
+    }
+  }
+
+  /* Preview imagem */
+  function previewImage(url) {
+    const img = document.getElementById('previewImg');
+    const placeholder = document.getElementById('previewPlaceholder');
+    if (!url || !url.trim()) {
+      if (img) img.style.display = 'none';
+      if (placeholder) placeholder.style.display = 'flex';
+      return;
+    }
+    if (!img) {
+      // Criar tag img dinamicamente
+      const newImg = document.createElement('img');
+      newImg.id = 'previewImg';
+      newImg.style = 'width:100%;height:100%;object-fit:cover;display:block;';
+      newImg.onerror = () => { newImg.style.display='none'; placeholder.style.display='flex'; };
+      newImg.onload = () => { placeholder.style.display='none'; };
+      newImg.src = url;
+      document.getElementById('imgPreview').appendChild(newImg);
+    } else {
+      img.onload = () => { img.style.display='block'; placeholder.style.display='none'; };
+      img.onerror = () => { img.style.display='none'; placeholder.style.display='flex'; };
+      img.src = url;
+    }
+  }
+
+  function previewBg(color) {
+    document.getElementById('imgPreview').style.background = color;
+  }
+
+  function testImageUrl() {
+    const url = document.getElementById('imageUrlInput').value.trim();
+    if (!url) return;
+    window.open(url, '_blank', 'width=400,height=500');
+  }
+
+  /* Preview em tempo real do nome, categoria e preço */
+  function syncPreview() {
+    const name = document.querySelector('[name="name"]')?.value || 'Nome do Produto';
+    const cat = document.querySelector('[name="category"]')?.value || 'Categoria';
+    const price = parseFloat(document.querySelector('[name="price"]')?.value) || 0;
+    document.getElementById('previewName').textContent = name;
+    document.getElementById('previewCategory').textContent = cat;
+    document.getElementById('previewPrice').textContent = 'R$ ' + price.toFixed(2).replace('.', ',');
+  }
+
+  document.getElementById('productForm').addEventListener('input', syncPreview);
+
+  /* Inicializar preview */
+  syncPreview();
+  const initialUrl = document.getElementById('imageUrlInput')?.value;
+  if (initialUrl) previewImage(initialUrl);
+  const initialColor = document.getElementById('bgColorInput')?.value;
+  if (initialColor) previewBg(initialColor);
 </script>
 </section>
 </html>

@@ -18,12 +18,13 @@
 <div class="aw-section" style="padding-top:40px;">
   <div class="aw-container">
 
-    <!-- Filters -->
+    <!-- Filtros dinâmicos -->
     <div class="aw-shop-filters">
-      <button class="aw-filter-btn active" onclick="filterProducts('Todos', this)">Todos</button>
-      <button class="aw-filter-btn" onclick="filterProducts('Camisetas', this)">Camisetas</button>
-      <button class="aw-filter-btn" onclick="filterProducts('Moletons', this)">Moletons</button>
-      <button class="aw-filter-btn" onclick="filterProducts('Acessórios', this)">Acessórios</button>
+      <button th:each="cat : ${categories}"
+              class="aw-filter-btn"
+              th:classappend="${cat == 'Todos'} ? ' active'"
+              th:text="${cat}"
+              th:onclick="'filterProducts(' + '\'' + cat + '\'' + ', this)'">Todos</button>
       <div style="margin-left:auto;display:flex;gap:12px;align-items:center;">
         <span style="font-family:'Space Grotesk',sans-serif;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--aw-gray-400);">Ordenar:</span>
         <select onchange="sortProducts(this.value)" style="background:var(--aw-charcoal);border:1px solid var(--aw-gray-800);color:var(--aw-white);padding:8px 16px;border-radius:4px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;outline:none;">
@@ -50,7 +51,12 @@
            th:data-name="${product.name}">
         <a th:href="@{/anchorwear/produto/{id}(id=${product.id})}">
           <div class="aw-product-card__img" th:style="'background:' + ${product.bgColor}">
-            <div class="aw-product-visual">
+            <!-- Imagem real se disponível -->
+            <img th:if="${product.imageUrl != null and !product.imageUrl.isEmpty()}"
+                 th:src="${product.imageUrl}" th:alt="${product.name}"
+                 style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"/>
+            <!-- Placeholder visual se sem imagem -->
+            <div th:if="${product.imageUrl == null or product.imageUrl.isEmpty()}" class="aw-product-visual">
               <span class="aw-pv-anchor">⚓</span>
               <span class="aw-pv-label" th:text="${product.name}"></span>
             </div>
@@ -73,6 +79,7 @@
                     th:data-id="${product.id}"
                     th:data-name="${product.name}"
                     th:data-price="${product.price}"
+                    th:data-image="${product.imageUrl}"
                     onclick="addToCartFromBtn(this)"
                     title="Adicionar ao carrinho">🛒</button>
           </div>
@@ -97,16 +104,12 @@ function filterProducts(category, btn) {
   const cards = document.querySelectorAll('#productsGrid .aw-product-card');
   let visible = 0;
   cards.forEach(card => {
-    const cat = card.dataset.category;
-    const show = category === 'Todos' || cat === category;
+    const show = category === 'Todos' || card.dataset.category === category;
     card.style.display = show ? '' : 'none';
     if (show) visible++;
   });
   document.getElementById('productCount').textContent = visible + ' produtos';
   document.getElementById('emptyState').style.display = visible === 0 ? 'block' : 'none';
-}
-function addToCartFromBtn(btn) {
-  addToCart(parseInt(btn.dataset.id), btn.dataset.name, parseFloat(btn.dataset.price), 'M', 'Padrão');
 }
 function sortProducts(method) {
   const grid = document.getElementById('productsGrid');

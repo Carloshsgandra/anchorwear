@@ -75,11 +75,14 @@
 
     <div style="display:flex;gap:12px;justify-content:center;margin-top:24px;flex-wrap:wrap;">
       <a th:href="@{/conta/pedido/{id}(id=${order.id})}" class="aw-btn aw-btn--outline">Ver Detalhes do Pedido</a>
-      <a th:href="@{/anchorwear/shop}" class="aw-btn aw-btn--primary" onclick="localStorage.removeItem('aw_cart');">
-        Continuar Comprando
-      </a>
+      <a th:href="@{/anchorwear/shop}" class="aw-btn aw-btn--primary">Continuar Comprando</a>
     </div>
   </div>
 </div>
+<script>
+  /* Limpar carrinho assim que a página de sucesso carrega */
+  localStorage.removeItem('aw_cart');
+  document.querySelectorAll('#cartCount').forEach(el => el.textContent = '0');
+</script>
 </main>
 </html>

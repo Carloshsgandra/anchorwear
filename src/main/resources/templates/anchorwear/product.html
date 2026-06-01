@@ -22,20 +22,41 @@
       <!-- Gallery -->
       <div class="aw-product-detail__gallery">
         <div class="aw-product-detail__main-img" th:style="'background:' + ${product.bgColor}" id="mainImg">
-          <div style="text-align:center;">
+          <!-- Imagem real -->
+          <img th:if="${product.imageUrl != null and !product.imageUrl.isEmpty()}"
+               th:src="${product.imageUrl}" th:alt="${product.name}"
+               id="mainImgTag"
+               style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:inherit;"/>
+          <!-- Placeholder -->
+          <div th:if="${product.imageUrl == null or product.imageUrl.isEmpty()}"
+               style="text-align:center;padding:40px 20px;">
             <div style="font-size:120px;opacity:0.08;">⚓</div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(24px,4vw,48px);letter-spacing:4px;color:rgba(255,255,255,0.3);margin-top:-20px;" th:text="${product.name}">Nome</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(24px,4vw,48px);letter-spacing:4px;color:rgba(255,255,255,0.3);margin-top:-20px;"
+                 th:text="${product.name}">Nome</div>
             <div style="margin-top:24px;width:160px;height:160px;border:2px solid rgba(200,169,110,0.3);border-radius:8px;display:inline-flex;align-items:center;justify-content:center;">
               <span style="font-size:80px;opacity:0.5;">⚓</span>
             </div>
           </div>
         </div>
         <div class="aw-product-detail__thumbs">
-          <div th:each="n : ${#numbers.sequence(1,3)}" class="aw-product-detail__thumb"
+          <!-- Thumb 1: imagem principal -->
+          <div class="aw-product-detail__thumb active"
                th:style="'background:' + ${product.bgColor}"
-               th:classappend="${n == 1} ? ' active'"
-               onclick="selectThumb(this)">
-            <span style="font-size:24px;opacity:0.4;">⚓</span>
+               onclick="selectThumb(this, null)">
+            <img th:if="${product.imageUrl != null and !product.imageUrl.isEmpty()}"
+                 th:src="${product.imageUrl}" th:alt="${product.name}"
+                 style="width:100%;height:100%;object-fit:cover;"/>
+            <span th:if="${product.imageUrl == null or product.imageUrl.isEmpty()}"
+                  style="font-size:24px;opacity:0.4;">⚓</span>
+          </div>
+          <!-- Thumbs 2 e 3: variações de cor -->
+          <div th:each="color, i : ${product.colors}" th:if="${i.index < 2}"
+               class="aw-product-detail__thumb"
+               th:style="'background:' + ${product.bgColor}"
+               th:onclick="'selectThumb(this, null)'"
+               style="cursor:pointer;">
+            <span style="font-size:10px;font-family:Space Grotesk,sans-serif;color:rgba(255,255,255,0.5);text-align:center;padding:4px;"
+                  th:text="${color}"></span>
           </div>
         </div>
       </div>
@@ -96,6 +117,7 @@
                   th:data-id="${product.id}"
                   th:data-name="${product.name}"
                   th:data-price="${product.price}"
+                  th:data-image="${product.imageUrl}"
                   onclick="doAddToCart(this)">
             🛒 Adicionar ao Carrinho
           </button>
@@ -172,7 +194,10 @@
         <div th:each="rel : ${related}" class="aw-product-card">
           <a th:href="@{/anchorwear/produto/{id}(id=${rel.id})}">
             <div class="aw-product-card__img" th:style="'background:' + ${rel.bgColor}">
-              <div class="aw-product-visual">
+              <img th:if="${rel.imageUrl != null and !rel.imageUrl.isEmpty()}"
+                   th:src="${rel.imageUrl}" th:alt="${rel.name}"
+                   style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"/>
+              <div th:if="${rel.imageUrl == null or rel.imageUrl.isEmpty()}" class="aw-product-visual">
                 <span class="aw-pv-anchor">⚓</span>
                 <span class="aw-pv-label" th:text="${rel.name}"></span>
               </div>
@@ -190,6 +215,7 @@
                       th:data-id="${rel.id}"
                       th:data-name="${rel.name}"
                       th:data-price="${rel.price}"
+                      th:data-image="${rel.imageUrl}"
                       onclick="addToCartFromBtn(this)"
                       title="Adicionar ao carrinho">🛒</button>
             </div>
@@ -232,7 +258,8 @@
     const id = parseInt(btn.dataset.id);
     const name = btn.dataset.name;
     const price = parseFloat(btn.dataset.price);
-    addToCart(id, name, price, _selectedSize, _selectedColor, _qty);
+    const imageUrl = btn.dataset.image || '';
+    addToCart(id, name, price, _selectedSize, _selectedColor, _qty, imageUrl);
   }
 
   function toggleAccordion(btn) {
