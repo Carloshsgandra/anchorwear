@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{anchorwear/layout :: layout(~{::title}, ~{::section#main}, 'shop')}">
+<head><title>Carrinho</title></head>
+<body>
+<section id="main">
+
+<div class="aw-cart-page">
+  <div class="aw-container">
+
+    <h1 class="aw-cart-title">CARRINHO</h1>
+
+    <!-- Empty -->
+    <div id="cartEmpty" class="aw-cart-empty" style="display:none;">
+      <div class="aw-cart-empty__icon">🛒</div>
+      <p class="aw-cart-empty__title">CARRINHO VAZIO</p>
+      <p class="aw-cart-empty__sub">Você ainda não adicionou nenhum produto. Explore nossa coleção!</p>
+      <a th:href="@{/anchorwear/shop}" class="aw-btn aw-btn--primary aw-btn--lg">Ver Produtos →</a>
+    </div>
+
+    <!-- Cart Content -->
+    <div id="cartContent" class="aw-cart-grid" style="display:none;">
+
+      <!-- Items -->
+      <div>
+        <div id="cartItems" class="aw-cart-items"></div>
+
+        <!-- Continue shopping -->
+        <div style="margin-top:24px;">
+          <a th:href="@{/anchorwear/shop}" class="aw-btn aw-btn--dark">← Continuar Comprando</a>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="aw-order-summary">
+        <p class="aw-order-summary__title">Resumo do Pedido</p>
+
+        <div class="aw-order-line">
+          <span>Subtotal</span>
+          <span id="subtotalVal">R$ 0,00</span>
+        </div>
+        <div class="aw-order-line">
+          <span>Frete</span>
+          <span id="freteVal">Calcular</span>
+        </div>
+        <div class="aw-order-line">
+          <span>Desconto</span>
+          <span id="descontoVal" style="color:var(--aw-accent);">— R$ 0,00</span>
+        </div>
+        <div class="aw-order-line aw-order-line--total">
+          <span>Total</span>
+          <span id="totalVal">R$ 0,00</span>
+        </div>
+
+        <!-- Coupon -->
+        <div class="aw-coupon">
+          <input type="text" placeholder="Cupom de desconto" id="couponInput"/>
+          <button class="aw-btn aw-btn--dark aw-btn--sm" onclick="applyCoupon()">Aplicar</button>
+        </div>
+
+        <!-- Frete calc -->
+        <div style="display:flex;gap:8px;margin-bottom:24px;">
+          <input type="text" placeholder="Seu CEP" maxlength="9" id="cepInput"
+                 style="flex:1;background:var(--aw-dark);border:1px solid var(--aw-gray-800);border-radius:4px;padding:12px 14px;font-family:'Inter',sans-serif;font-size:13px;color:var(--aw-white);outline:none;"
+                 oninput="formatCep(this)"/>
+          <button class="aw-btn aw-btn--dark aw-btn--sm" onclick="calcFrete()">Calcular</button>
+        </div>
+        <div id="freteOptions" style="display:none;margin-bottom:20px;display:flex;flex-direction:column;gap:8px;">
+          <label style="display:flex;align-items:center;gap:10px;padding:12px 16px;border:1px solid var(--aw-gray-800);border-radius:4px;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:13px;color:var(--aw-white);">
+            <input type="radio" name="frete" value="pac" onchange="selectFrete(14.90,'PAC — 7 a 10 dias')"/> PAC — 7 a 10 dias úteis — R$&nbsp;14,90
+          </label>
+          <label style="display:flex;align-items:center;gap:10px;padding:12px 16px;border:1px solid var(--aw-gray-800);border-radius:4px;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:13px;color:var(--aw-white);">
+            <input type="radio" name="frete" value="sedex" onchange="selectFrete(29.90,'Sedex — 2 a 5 dias')"/> Sedex — 2 a 5 dias úteis — R$&nbsp;29,90
+          </label>
+        </div>
+
+        <button class="aw-btn aw-btn--primary aw-btn--full aw-btn--lg" onclick="checkout()" style="margin-bottom:16px;">
+          🔒 Finalizar Compra
+        </button>
+        <button class="aw-btn aw-btn--dark aw-btn--full" onclick="checkout()" style="background:var(--aw-navy);border-color:var(--aw-navy);">
+          Pix — 5% de desconto
+        </button>
+
+        <div class="aw-payment-icons" style="justify-content:center;">
+          <span class="aw-payment-icon">PIX</span>
+          <span class="aw-payment-icon">VISA</span>
+          <span class="aw-payment-icon">MASTER</span>
+          <span class="aw-payment-icon">ELO</span>
+          <span class="aw-payment-icon">BOLETO</span>
+        </div>
+
+        <p style="text-align:center;font-size:12px;color:var(--aw-gray-400);margin-top:16px;font-family:'Space Grotesk',sans-serif;">
+          🔒 Pagamento 100% seguro · SSL
+        </p>
+      </div>
+    </div>
+
+    <!-- Recommended -->
+    <div id="cartRecommended" style="margin-top:80px;">
+      <div class="aw-section-header aw-section-header--row">
+        <div>
+          <p class="aw-section-label">Aproveite Também</p>
+          <h2 class="aw-section-title" style="font-size:clamp(36px,5vw,60px);">VOCÊ VAI AMAR</h2>
+        </div>
+        <a th:href="@{/anchorwear/shop}" class="aw-btn aw-btn--outline">Ver Tudo →</a>
+      </div>
+      <div class="aw-products-grid">
+        <!-- Static recommended products -->
+        <div class="aw-product-card">
+          <a th:href="@{/anchorwear/produto/1}">
+            <div class="aw-product-card__img" style="background:#1a1a1a;">
+              <div class="aw-product-visual"><span class="aw-pv-anchor">⚓</span><span class="aw-pv-label">Anchor Classic</span></div>
+              <div class="aw-product-card__overlay"><span style="font-size:13px;font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:2px;text-transform:uppercase;">Ver Produto</span></div>
+              <span class="aw-product-card__badge badge-bestseller">+ Vendido</span>
+            </div>
+          </a>
+          <div class="aw-product-card__info">
+            <p class="aw-product-card__category">Camisetas</p>
+            <p class="aw-product-card__name">Camiseta Anchor Classic</p>
+            <div class="aw-product-card__footer">
+              <span class="aw-product-card__price">R$ 89,90</span>
+              <button class="aw-product-card__cart" onclick="addToCart(1,'Camiseta Anchor Classic',89.90,'M','Preto')">🛒</button>
+            </div>
+          </div>
+        </div>
+        <div class="aw-product-card">
+          <a th:href="@{/anchorwear/produto/4}">
+            <div class="aw-product-card__img" style="background:#111;">
+              <div class="aw-product-visual"><span class="aw-pv-anchor">⚓</span><span class="aw-pv-label">Premium Hoodie</span></div>
+              <div class="aw-product-card__overlay"><span style="font-size:13px;font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:2px;text-transform:uppercase;">Ver Produto</span></div>
+              <span class="aw-product-card__badge badge-bestseller">+ Vendido</span>
+            </div>
+          </a>
+          <div class="aw-product-card__info">
+            <p class="aw-product-card__category">Moletons</p>
+            <p class="aw-product-card__name">Moletom Anchor Premium</p>
+            <div class="aw-product-card__footer">
+              <span class="aw-product-card__price">R$ 189,90</span>
+              <button class="aw-product-card__cart" onclick="addToCart(4,'Moletom Anchor Premium',189.90,'M','Preto')">🛒</button>
+            </div>
+          </div>
+        </div>
+        <div class="aw-product-card">
+          <a th:href="@{/anchorwear/produto/9}">
+            <div class="aw-product-card__img" style="background:#f0ece0;">
+              <div class="aw-product-visual"><span class="aw-pv-anchor" style="color:rgba(0,0,0,0.08);">⚓</span><span class="aw-pv-label" style="color:rgba(0,0,0,0.2);">Tide</span></div>
+              <div class="aw-product-card__overlay"><span style="font-size:13px;font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:2px;text-transform:uppercase;">Ver Produto</span></div>
+              <span class="aw-product-card__badge badge-new">Novo</span>
+            </div>
+          </a>
+          <div class="aw-product-card__info">
+            <p class="aw-product-card__category">Camisetas</p>
+            <p class="aw-product-card__name">Camiseta Tide</p>
+            <div class="aw-product-card__footer">
+              <span class="aw-product-card__price">R$ 99,90</span>
+              <button class="aw-product-card__cart" onclick="addToCart(9,'Camiseta Tide',99.90,'M','Off-white')">🛒</button>
+            </div>
+          </div>
+        </div>
+        <div class="aw-product-card">
+          <a th:href="@{/anchorwear/produto/8}">
+            <div class="aw-product-card__img" style="background:#1a1a1a;">
+              <div class="aw-product-visual"><span class="aw-pv-anchor">⚓</span><span class="aw-pv-label">Anchor Cap</span></div>
+              <div class="aw-product-card__overlay"><span style="font-size:13px;font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:2px;text-transform:uppercase;">Ver Produto</span></div>
+            </div>
+          </a>
+          <div class="aw-product-card__info">
+            <p class="aw-product-card__category">Acessórios</p>
+            <p class="aw-product-card__name">Boné Anchor Cap</p>
+            <div class="aw-product-card__footer">
+              <span class="aw-product-card__price">R$ 69,90</span>
+              <button class="aw-product-card__cart" onclick="addToCart(8,'Boné Anchor Cap',69.90,'Único','Preto')">🛒</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  let freteValue = 0;
+  let discountValue = 0;
+  const COUPONS = { 'ANCHOR10': 0.10, 'ANCORA20': 0.20, 'ESTREIA': 0.15 };
+
+  function fmt(v) { return 'R$ ' + v.toFixed(2).replace('.', ','); }
+
+  function renderCart() {
+    const cart = getCart();
+    const empty = document.getElementById('cartEmpty');
+    const content = document.getElementById('cartContent');
+
+    if (!cart.length) {
+      empty.style.display = 'block';
+      content.style.display = 'none';
+      return;
+    }
+
+    empty.style.display = 'none';
+    content.style.display = 'grid';
+
+    const itemsEl = document.getElementById('cartItems');
+    itemsEl.innerHTML = cart.map(item => `
+      <div class="aw-cart-item" data-key="${item.key}">
+        <div class="aw-cart-item__img" style="background:#1e1e1e;">
+          <span style="font-size:40px;opacity:0.3;">⚓</span>
+        </div>
+        <div>
+          <p class="aw-cart-item__name">${item.name}</p>
+          <p class="aw-cart-item__meta">Tamanho: ${item.size} · Cor: ${item.color}</p>
+          <div class="aw-qty" style="margin-bottom:12px;">
+            <button onclick="updateQty('${item.key}', -1)" style="width:36px;height:40px;">−</button>
+            <span class="aw-qty__val" style="width:44px;height:40px;line-height:40px;font-size:14px;">${item.qty}</span>
+            <button onclick="updateQty('${item.key}', 1)" style="width:36px;height:40px;">+</button>
+          </div>
+          <button class="aw-cart-item__remove" onclick="removeItem('${item.key}')">✕ Remover</button>
+        </div>
+        <div class="aw-cart-item__price">${fmt(item.price * item.qty)}</div>
+      </div>
+    `).join('');
+
+    updateTotals();
+  }
+
+  function updateQty(key, delta) {
+    const cart = getCart();
+    const item = cart.find(i => i.key === key);
+    if (!item) return;
+    item.qty = Math.max(1, (item.qty || 1) + delta);
+    saveCart(cart);
+    renderCart();
+  }
+
+  function removeItem(key) {
+    const cart = getCart().filter(i => i.key !== key);
+    saveCart(cart);
+    renderCart();
+    showToast('🗑️', 'Item removido do carrinho.');
+  }
+
+  function updateTotals() {
+    const cart = getCart();
+    const subtotal = cart.reduce((s, i) => s + i.price * (i.qty || 1), 0);
+    const frete = subtotal >= 299 ? 0 : freteValue;
+    const discount = subtotal * discountValue;
+    const total = subtotal + frete - discount;
+
+    document.getElementById('subtotalVal').textContent = fmt(subtotal);
+    document.getElementById('freteVal').textContent = subtotal >= 299 ? 'Grátis 🎉' : (frete > 0 ? fmt(frete) : 'Calcular');
+    document.getElementById('descontoVal').textContent = discount > 0 ? '— ' + fmt(discount) : '— R$ 0,00';
+    document.getElementById('totalVal').textContent = fmt(total);
+  }
+
+  function applyCoupon() {
+    const code = document.getElementById('couponInput').value.trim().toUpperCase();
+    if (COUPONS[code]) {
+      discountValue = COUPONS[code];
+      showToast('✅', `Cupom aplicado! ${(discountValue * 100).toFixed(0)}% de desconto.`);
+      updateTotals();
+    } else {
+      showToast('❌', 'Cupom inválido ou expirado.');
+    }
+  }
+
+  function formatCep(input) {
+    let v = input.value.replace(/\D/g, '').slice(0, 8);
+    if (v.length > 5) v = v.slice(0, 5) + '-' + v.slice(5);
+    input.value = v;
+  }
+
+  function calcFrete() {
+    const cep = document.getElementById('cepInput').value.replace(/\D/g, '');
+    if (cep.length !== 8) { showToast('⚠️', 'CEP inválido.'); return; }
+    const opts = document.getElementById('freteOptions');
+    opts.style.display = 'flex';
+    showToast('✅', 'Opções de frete disponíveis!');
+  }
+
+  function selectFrete(value, label) {
+    freteValue = value;
+    updateTotals();
+  }
+
+  function checkout() {
+    showToast('🛒', 'Redirecionando para o pagamento...');
+    setTimeout(() => {
+      alert('Esta é uma demonstração. Em produção, redirecionaria para o gateway de pagamento.');
+    }, 1000);
+  }
+
+  renderCart();
+</script>
+
+</section>
+</body>
+</html>

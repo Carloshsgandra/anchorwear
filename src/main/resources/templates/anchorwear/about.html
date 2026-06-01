@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{anchorwear/layout :: layout(~{::title}, ~{::section#main}, 'about')}">
+<head><title>Sobre Nós</title></head>
+<body>
+<section id="main">
+
+<!-- Hero -->
+<div class="aw-page-hero">
+  <div class="aw-container">
+    <p class="aw-section-label" style="justify-content:center;">Nossa Jornada</p>
+    <h1 class="aw-page-hero__title">SOBRE A <span>MARCA</span></h1>
+    <p class="aw-page-hero__subtitle">
+      Uma marca nascida da vontade de transformar ideias em peças únicas. Do conceito à camiseta, cada detalhe tem propósito.
+    </p>
+  </div>
+</div>
+
+<!-- Stats -->
+<section style="padding:60px 0;border-bottom:1px solid var(--aw-gray-800);background:var(--aw-dark);">
+  <div class="aw-container">
+    <div class="aw-stats">
+      <div class="aw-stat">
+        <div class="aw-stat__num">+2K</div>
+        <p class="aw-stat__label">Clientes</p>
+      </div>
+      <div class="aw-stat">
+        <div class="aw-stat__num">+500</div>
+        <p class="aw-stat__label">Personalizações</p>
+      </div>
+      <div class="aw-stat">
+        <div class="aw-stat__num">100%</div>
+        <p class="aw-stat__label">Satisfação</p>
+      </div>
+      <div class="aw-stat">
+        <div class="aw-stat__num">5★</div>
+        <p class="aw-stat__label">Avaliação Média</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Story -->
+<section class="aw-section">
+  <div class="aw-container">
+    <div class="aw-about-grid">
+      <div class="aw-about-visual">
+        <div class="aw-about-visual__text">ANCHOR</div>
+        <div class="aw-about-visual__overlay">
+          <div class="aw-about-visual__logo">⚓</div>
+          <div class="aw-about-visual__since">Since 2022</div>
+        </div>
+      </div>
+      <div>
+        <p class="aw-section-label">Nossa História</p>
+        <h2 class="aw-section-title" style="margin-bottom:32px;">DE ONDE<br/>VIEMOS</h2>
+        <p class="aw-about-lead">
+          A Anchor Wear nasceu de uma ideia simples: vestuário deveria ser uma extensão de quem você é.
+        </p>
+        <p class="aw-about-body">
+          Fundada em 2022, a marca surgiu da frustração de não encontrar no mercado peças que realmente expressassem identidade — não apenas roupa, mas um statement. A âncora, nosso símbolo, representa firmeza, propósito e a capacidade de se manter fiel a si mesmo mesmo sob pressão.
+        </p>
+        <p class="aw-about-body">
+          Começamos pequenos, com uma prensa de estampa e muita vontade. Hoje, atendemos milhares de clientes em todo o Brasil, cada um com sua história, sua ideia, sua peça única. A personalização sempre foi — e sempre será — o coração do que fazemos.
+        </p>
+        <p class="aw-about-body">
+          Cada costura, cada estampa, cada entrega é um compromisso renovado: qualidade sem concessões e autenticidade sem filtros.
+        </p>
+        <div style="margin-top:40px;display:flex;gap:16px;flex-wrap:wrap;">
+          <a th:href="@{/anchorwear/shop}" class="aw-btn aw-btn--primary">Ver Coleção</a>
+          <a th:href="@{/anchorwear/personalizar}" class="aw-btn aw-btn--outline">Personalizar</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Manifesto -->
+<section style="padding:80px 0;background:linear-gradient(135deg,var(--aw-navy),var(--aw-charcoal));">
+  <div class="aw-container" style="max-width:800px;text-align:center;">
+    <p style="font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:rgba(200,169,110,0.8);margin-bottom:24px;">Manifesto</p>
+    <blockquote style="font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,5vw,72px);letter-spacing:3px;line-height:1.1;color:var(--aw-white);">
+      "NÃO É SÓ ROUPA.<br/>É A SUA IDEIA<br/>VIRANDO <span style="color:var(--aw-accent);">CAMISETA.</span>"
+    </blockquote>
+    <div style="width:60px;height:2px;background:var(--aw-accent);margin:40px auto;"></div>
+    <p style="font-size:16px;line-height:1.8;color:rgba(255,255,255,0.7);font-family:'Inter',sans-serif;">
+      Acreditamos que moda é linguagem. Que cada peça fala antes mesmo de você abrir a boca. E que vestir algo autêntico, feito com propósito, muda a forma como você se sente e como o mundo te vê.
+    </p>
+  </div>
+</section>
+
+<!-- Values -->
+<section class="aw-section--dark">
+  <div class="aw-container">
+    <div class="aw-section-header" style="text-align:center;">
+      <p class="aw-section-label" style="justify-content:center;">O Que Nos Move</p>
+      <h2 class="aw-section-title">NOSSOS VALORES</h2>
+    </div>
+    <div class="aw-values">
+      <div class="aw-value">
+        <div class="aw-value__icon">⚓</div>
+        <p class="aw-value__title">Autenticidade</p>
+        <p class="aw-value__desc">Nada de cópia, nada de genérico. Cada peça é criada com identidade própria.</p>
+      </div>
+      <div class="aw-value">
+        <div class="aw-value__icon">🧵</div>
+        <p class="aw-value__title">Qualidade</p>
+        <p class="aw-value__desc">Materiais premium, acabamento impecável e durabilidade que você sente.</p>
+      </div>
+      <div class="aw-value">
+        <div class="aw-value__icon">💡</div>
+        <p class="aw-value__title">Criatividade</p>
+        <p class="aw-value__desc">Transformamos conceitos abstratos em arte vestível. Sua ideia tem valor.</p>
+      </div>
+      <div class="aw-value">
+        <div class="aw-value__icon">🤝</div>
+        <p class="aw-value__title">Comunidade</p>
+        <p class="aw-value__desc">Não vendemos só roupa. Construímos uma tribo de pessoas com propósito.</p>
+      </div>
+      <div class="aw-value">
+        <div class="aw-value__icon">🌱</div>
+        <p class="aw-value__title">Responsabilidade</p>
+        <p class="aw-value__desc">Produção consciente, sem desperdício. Moda que respeita o planeta.</p>
+      </div>
+      <div class="aw-value">
+        <div class="aw-value__icon">🚀</div>
+        <p class="aw-value__title">Inovação</p>
+        <p class="aw-value__desc">Sempre explorando novas técnicas, estampas e formas de surpreender.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="aw-section">
+  <div class="aw-container">
+    <div class="aw-cta-banner">
+      <div class="aw-cta-banner__content">
+        <h2 class="aw-cta-banner__title">FAÇA PARTE DA TRIBO</h2>
+        <p class="aw-cta-banner__text">
+          Siga @_anchorwearoficial no Instagram e fique por dentro dos lançamentos, bastidores e novidades da marca.
+        </p>
+        <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+          <a href="https://www.instagram.com/_anchorwearoficial/" target="_blank" class="aw-btn aw-btn--accent aw-btn--lg">📸 Seguir no Instagram</a>
+          <a th:href="@{/anchorwear/shop}" class="aw-btn aw-btn--outline aw-btn--lg">Ver Coleção</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</section>
+</body>
+</html>

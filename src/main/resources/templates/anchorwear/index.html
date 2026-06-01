@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{anchorwear/layout :: layout(~{::title}, ~{::section#main}, 'home')}">
+<head><title>Início</title></head>
+<body>
+<section id="main">
+
+<!-- ══ HERO ══ -->
+<section class="aw-hero">
+  <div class="aw-hero__bg"></div>
+  <div class="aw-hero__grid"></div>
+  <div class="aw-hero__content">
+    <div class="aw-hero__text">
+      <p class="aw-hero__eyebrow">Nova Coleção 2024</p>
+      <h1 class="aw-hero__title">
+        NÃO É SÓ<br/>
+        ROU<span>PA.</span>
+      </h1>
+      <p class="aw-hero__subtitle">
+        É a sua ideia virando camiseta. Streetwear autêntico para quem tem personalidade e não abre mão de qualidade.
+      </p>
+      <div class="aw-hero__actions">
+        <a th:href="@{/anchorwear/shop}" class="aw-btn aw-btn--primary aw-btn--lg">Ver Coleção</a>
+        <a th:href="@{/anchorwear/personalizar}" class="aw-btn aw-btn--outline aw-btn--lg">Personalizar</a>
+      </div>
+    </div>
+    <div class="aw-hero__visual">
+      <div class="aw-hero__mockup" style="background:linear-gradient(135deg,#1e1e1e,#0d2b5e);border:1px solid rgba(200,169,110,0.2);">
+        <div style="text-align:center;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:80px;letter-spacing:8px;color:rgba(200,169,110,0.15);line-height:1;">⚓</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:8px;color:rgba(255,255,255,0.9);">ANCHOR</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:6px;color:rgba(200,169,110,0.8);margin-top:4px;">WEAR OFICIAL</div>
+          <div style="margin-top:32px;display:flex;flex-direction:column;gap:12px;align-items:center;">
+            <div style="width:200px;height:200px;border-radius:8px;background:linear-gradient(135deg,#111,#1a3f82);display:flex;align-items:center;justify-content:center;border:1px solid rgba(200,169,110,0.3);">
+              <span style="font-size:80px;opacity:0.6;">⚓</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="aw-hero__scroll">
+    <span>↓</span>
+    <span>scroll</span>
+  </div>
+</section>
+
+<!-- ══ TICKER ══ -->
+<div class="aw-ticker">
+  <div class="aw-ticker__inner">
+    <span class="aw-ticker__item">ANCHOR WEAR OFICIAL</span>
+    <span class="aw-ticker__sep">⚓</span>
+    <span class="aw-ticker__item">NÃO É SÓ ROUPA</span>
+    <span class="aw-ticker__sep">⚓</span>
+    <span class="aw-ticker__item">STREETWEAR AUTÊNTICO</span>
+    <span class="aw-ticker__sep">⚓</span>
+    <span class="aw-ticker__item">SUA IDEIA VIRANDO CAMISETA</span>
+    <span class="aw-ticker__sep">⚓</span>
+    <span class="aw-ticker__item">NOVA COLEÇÃO 2024</span>
+    <span class="aw-ticker__sep">⚓</span>
+    <!-- duplicate for seamless loop -->
+    <span class="aw-ticker__item">ANCHOR WEAR OFICIAL</span>
+    <span class="aw-ticker__sep">⚓</span>
+    <span class="aw-ticker__item">NÃO É SÓ ROUPA</span>
+    <span class="aw-ticker__sep">⚓</span>
+    <span class="aw-ticker__item">STREETWEAR AUTÊNTICO</span>
+    <span class="aw-ticker__sep">⚓</span>
+    <span class="aw-ticker__item">SUA IDEIA VIRANDO CAMISETA</span>
+    <span class="aw-ticker__sep">⚓</span>
+    <span class="aw-ticker__item">NOVA COLEÇÃO 2024</span>
+    <span class="aw-ticker__sep">⚓</span>
+  </div>
+</div>
+
+<!-- ══ FEATURES ══ -->
+<section class="aw-section--dark">
+  <div class="aw-container">
+    <div class="aw-features">
+      <div class="aw-feature">
+        <div class="aw-feature__icon">🧵</div>
+        <p class="aw-feature__title">Algodão Premium</p>
+        <p class="aw-feature__desc">100% algodão penteado, 200g/m². Conforto e durabilidade em cada peça.</p>
+      </div>
+      <div class="aw-feature">
+        <div class="aw-feature__icon">🎨</div>
+        <p class="aw-feature__title">Estampas Exclusivas</p>
+        <p class="aw-feature__desc">Design autoral em cada coleção. Nenhuma cópia, só originalidade.</p>
+      </div>
+      <div class="aw-feature">
+        <div class="aw-feature__icon">⚡</div>
+        <p class="aw-feature__title">Envio Rápido</p>
+        <p class="aw-feature__desc">Processamento em até 24h. Frete grátis para pedidos acima de R$299.</p>
+      </div>
+      <div class="aw-feature">
+        <div class="aw-feature__icon">🔄</div>
+        <p class="aw-feature__title">Troca Fácil</p>
+        <p class="aw-feature__desc">30 dias para troca ou devolução. Sem burocracia, sem stress.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FEATURED PRODUCTS ══ -->
+<section class="aw-section">
+  <div class="aw-container">
+    <div class="aw-section-header aw-section-header--row">
+      <div>
+        <p class="aw-section-label">Destaques</p>
+        <h2 class="aw-section-title">EM ALTA</h2>
+      </div>
+      <a th:href="@{/anchorwear/shop}" class="aw-btn aw-btn--outline">Ver Tudo →</a>
+    </div>
+    <div class="aw-products-grid">
+      <div th:each="product : ${featured}" class="aw-product-card">
+        <a th:href="@{/anchorwear/produto/{id}(id=${product.id})}">
+          <div class="aw-product-card__img" th:style="'background:' + ${product.bgColor}">
+            <div class="aw-product-visual">
+              <span class="aw-pv-anchor">⚓</span>
+              <span class="aw-pv-label" th:text="${product.name}"></span>
+            </div>
+            <div class="aw-product-card__overlay">
+              <span style="font-size:14px;font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:2px;text-transform:uppercase;">Ver Produto</span>
+            </div>
+            <span th:if="${product.badge == 'new'}" class="aw-product-card__badge badge-new">Novo</span>
+            <span th:if="${product.badge == 'bestseller'}" class="aw-product-card__badge badge-bestseller">+ Vendido</span>
+          </div>
+        </a>
+        <div class="aw-product-card__info">
+          <p class="aw-product-card__category" th:text="${product.category}">Categoria</p>
+          <p class="aw-product-card__name" th:text="${product.name}">Nome</p>
+          <div class="aw-product-card__footer">
+            <span class="aw-product-card__price" th:text="${product.priceFormatted}">R$ 0,00</span>
+            <button class="aw-product-card__cart"
+                    th:onclick="|addToCart(${product.id}, '${product.name}', ${product.price}, 'M', 'Padrão')|"
+                    title="Adicionar ao carrinho">🛒</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PERSONALIZE CTA ══ -->
+<section class="aw-section--dark">
+  <div class="aw-container">
+    <div class="aw-cta-banner">
+      <div class="aw-cta-banner__content">
+        <h2 class="aw-cta-banner__title">SUA IDEIA.<br/>NOSSA EXECUÇÃO.</h2>
+        <p class="aw-cta-banner__text">
+          Tem uma ideia na cabeça? A gente coloca ela na camiseta. Envie sua arte, texto ou conceito e criamos algo único para você.
+        </p>
+        <a th:href="@{/anchorwear/personalizar}" class="aw-btn aw-btn--accent aw-btn--lg">Criar Minha Camiseta →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ NEW ARRIVALS ══ -->
+<section class="aw-section">
+  <div class="aw-container">
+    <div class="aw-section-header aw-section-header--row">
+      <div>
+        <p class="aw-section-label">Recém Chegou</p>
+        <h2 class="aw-section-title">LANÇAMENTOS</h2>
+      </div>
+      <a th:href="@{/anchorwear/shop}" class="aw-btn aw-btn--outline">Ver Tudo →</a>
+    </div>
+    <div class="aw-products-grid">
+      <div th:each="product : ${newArrivals}" class="aw-product-card">
+        <a th:href="@{/anchorwear/produto/{id}(id=${product.id})}">
+          <div class="aw-product-card__img" th:style="'background:' + ${product.bgColor}">
+            <div class="aw-product-visual">
+              <span class="aw-pv-anchor">⚓</span>
+              <span class="aw-pv-label" th:text="${product.name}"></span>
+            </div>
+            <div class="aw-product-card__overlay">
+              <span style="font-size:14px;font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:2px;text-transform:uppercase;">Ver Produto</span>
+            </div>
+            <span class="aw-product-card__badge badge-new">Novo</span>
+          </div>
+        </a>
+        <div class="aw-product-card__info">
+          <p class="aw-product-card__category" th:text="${product.category}">Categoria</p>
+          <p class="aw-product-card__name" th:text="${product.name}">Nome</p>
+          <div class="aw-product-card__footer">
+            <span class="aw-product-card__price" th:text="${product.priceFormatted}">R$ 0,00</span>
+            <button class="aw-product-card__cart"
+                    th:onclick="|addToCart(${product.id}, '${product.name}', ${product.price}, 'M', 'Padrão')|"
+                    title="Adicionar ao carrinho">🛒</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TESTIMONIALS ══ -->
+<section class="aw-section--dark">
+  <div class="aw-container">
+    <div class="aw-section-header">
+      <p class="aw-section-label">Clientes Reais</p>
+      <h2 class="aw-section-title">O QUE FALAM</h2>
+    </div>
+    <div class="aw-testimonials">
+      <div class="aw-testimonial">
+        <div class="aw-testimonial__stars">★★★★★</div>
+        <p class="aw-testimonial__text">"Comprei a Anchor Classic e me apaixonei. Qualidade incrível, caimento perfeito e chegou em 3 dias. Com certeza vou pedir mais."</p>
+        <div class="aw-testimonial__author">
+          <div class="aw-testimonial__avatar">LM</div>
+          <div>
+            <p class="aw-testimonial__name">Lucas Mendes</p>
+            <p class="aw-testimonial__location">São Paulo, SP</p>
+          </div>
+        </div>
+      </div>
+      <div class="aw-testimonial">
+        <div class="aw-testimonial__stars">★★★★★</div>
+        <p class="aw-testimonial__text">"Fiz uma camiseta personalizada para o meu grupo de amigos e ficou PERFEITA. O pessoal me ajudou em tudo, do design à entrega."</p>
+        <div class="aw-testimonial__author">
+          <div class="aw-testimonial__avatar">AC</div>
+          <div>
+            <p class="aw-testimonial__name">Ana Clara</p>
+            <p class="aw-testimonial__location">Belo Horizonte, MG</p>
+          </div>
+        </div>
+      </div>
+      <div class="aw-testimonial">
+        <div class="aw-testimonial__stars">★★★★★</div>
+        <p class="aw-testimonial__text">"O moletom é pesado, quente e o material é top. Não é aquele moletom fininho que perde a forma depois de duas lavagens. Vale cada centavo."</p>
+        <div class="aw-testimonial__author">
+          <div class="aw-testimonial__avatar">RF</div>
+          <div>
+            <p class="aw-testimonial__name">Rafael Ferreira</p>
+            <p class="aw-testimonial__location">Rio de Janeiro, RJ</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ INSTAGRAM ══ -->
+<section class="aw-section">
+  <div class="aw-container">
+    <div class="aw-section-header" style="text-align:center;">
+      <p class="aw-section-label" style="justify-content:center;">Nos siga</p>
+      <h2 class="aw-section-title">@_ANCHORWEAROFICIAL</h2>
+    </div>
+    <div class="aw-instagram-grid">
+      <div th:each="n : ${#numbers.sequence(1,6)}" class="aw-instagram-item">
+        <div class="aw-instagram-item__inner"
+             th:style="'background:linear-gradient(135deg,' + (${n % 3 == 0} ? '#0d2b5e,#1a1a1a' : (${n % 2 == 0} ? '#1a1a1a,#2a2a2a' : '#2a2a2a,#0d2b5e')) + ')'">
+          <span style="font-size:40px;opacity:0.4;">⚓</span>
+        </div>
+        <div class="aw-instagram-item__overlay">📸</div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:32px;">
+      <a href="https://www.instagram.com/_anchorwearoficial/" target="_blank" class="aw-btn aw-btn--outline">
+        Seguir no Instagram →
+      </a>
+    </div>
+  </div>
+</section>
+
+</section>
+</body>
+</html>

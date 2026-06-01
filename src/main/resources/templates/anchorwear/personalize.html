@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{anchorwear/layout :: layout(~{::title}, ~{::section#main}, 'personalize')}">
+<head><title>Personalizar</title></head>
+<body>
+<section id="main">
+
+<!-- Hero -->
+<div class="aw-page-hero">
+  <div class="aw-container">
+    <p class="aw-section-label" style="justify-content:center;">Exclusivo Para Você</p>
+    <h1 class="aw-page-hero__title">PERSONAL<span>IZE</span></h1>
+    <p class="aw-page-hero__subtitle">
+      Transformamos sua ideia em realidade. Envie sua arte, escolha seus detalhes e receba uma peça única feita sob medida.
+    </p>
+    <a href="#formulario" class="aw-btn aw-btn--accent aw-btn--lg">Começar Agora →</a>
+  </div>
+</div>
+
+<!-- Steps -->
+<section class="aw-section--dark">
+  <div class="aw-container">
+    <div class="aw-section-header" style="text-align:center;">
+      <p class="aw-section-label" style="justify-content:center;">Como Funciona</p>
+      <h2 class="aw-section-title">3 PASSOS SIMPLES</h2>
+    </div>
+    <div class="aw-steps">
+      <div class="aw-step">
+        <div class="aw-step__num">01</div>
+        <p class="aw-step__title">Envie Sua Ideia</p>
+        <p class="aw-step__desc">Preencha o formulário com sua ideia, arte ou referências. Quanto mais detalhes, melhor o resultado.</p>
+      </div>
+      <div class="aw-step">
+        <div class="aw-step__num">02</div>
+        <p class="aw-step__title">Aprovação do Arte</p>
+        <p class="aw-step__desc">Nossa equipe envia um preview da arte para sua aprovação em até 48h. Ajustes incluídos.</p>
+      </div>
+      <div class="aw-step">
+        <div class="aw-step__num">03</div>
+        <p class="aw-step__title">Produção e Envio</p>
+        <p class="aw-step__desc">Após aprovação, produzimos sua peça com máxima qualidade e enviamos para você.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Form -->
+<section class="aw-section" id="formulario">
+  <div class="aw-container" style="max-width:900px;">
+    <div class="aw-section-header">
+      <p class="aw-section-label">Formulário</p>
+      <h2 class="aw-section-title">SUA IDEIA</h2>
+    </div>
+
+    <div class="aw-form" id="personForm">
+      <div class="aw-form-grid">
+
+        <div class="aw-form-group">
+          <label class="aw-label">Seu Nome *</label>
+          <input type="text" class="aw-input" placeholder="Como você se chama?" id="pName"/>
+        </div>
+
+        <div class="aw-form-group">
+          <label class="aw-label">E-mail *</label>
+          <input type="email" class="aw-input" placeholder="seu@email.com" id="pEmail"/>
+        </div>
+
+        <div class="aw-form-group">
+          <label class="aw-label">WhatsApp</label>
+          <input type="tel" class="aw-input" placeholder="(00) 00000-0000" id="pPhone"/>
+        </div>
+
+        <div class="aw-form-group">
+          <label class="aw-label">Quantidade de Peças *</label>
+          <select class="aw-select" id="pQty">
+            <option value="">Selecione...</option>
+            <option value="1">1 peça</option>
+            <option value="2-5">2 a 5 peças</option>
+            <option value="6-10">6 a 10 peças</option>
+            <option value="11-20">11 a 20 peças</option>
+            <option value="21+">Acima de 20 peças</option>
+          </select>
+        </div>
+
+        <div class="aw-form-group">
+          <label class="aw-label">Tipo de Peça *</label>
+          <select class="aw-select" id="pType">
+            <option value="">Selecione...</option>
+            <option value="camiseta">Camiseta</option>
+            <option value="moletom">Moletom</option>
+            <option value="bone">Boné</option>
+            <option value="outro">Outro</option>
+          </select>
+        </div>
+
+        <div class="aw-form-group">
+          <label class="aw-label">Técnica de Impressão</label>
+          <select class="aw-select" id="pTech">
+            <option value="">Sem preferência</option>
+            <option value="serigrafia">Serigrafia</option>
+            <option value="dtf">DTF (Direct to Film)</option>
+            <option value="bordado">Bordado</option>
+            <option value="sublimacao">Sublimação</option>
+          </select>
+        </div>
+
+        <div class="aw-form-group aw-form-group--full">
+          <label class="aw-label">Descreva Sua Ideia *</label>
+          <textarea class="aw-textarea" style="min-height:150px;" placeholder="Descreva com detalhes o que você quer: cores, posição da estampa, texto, estilo visual, referências..." id="pDesc"></textarea>
+        </div>
+
+        <div class="aw-form-group aw-form-group--full">
+          <label class="aw-label">Arquivo / Referência</label>
+          <div class="aw-file-drop" onclick="document.getElementById('fileInput').click()" id="fileDrop">
+            <div class="aw-file-drop__icon">📎</div>
+            <p class="aw-file-drop__title">Arraste seu arquivo ou clique para selecionar</p>
+            <p class="aw-file-drop__sub">PNG, JPG, PDF, AI, EPS — Máx. 20MB</p>
+          </div>
+          <input type="file" id="fileInput" style="display:none" accept="image/*,.pdf,.ai,.eps" onchange="handleFile(this)"/>
+        </div>
+
+        <div class="aw-form-group aw-form-group--full">
+          <label class="aw-label">Informações Adicionais</label>
+          <textarea class="aw-textarea" placeholder="Prazo desejado, orçamento aproximado, alguma dúvida..." id="pExtra"></textarea>
+        </div>
+
+      </div>
+
+      <div style="margin-top:32px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+        <button class="aw-btn aw-btn--primary aw-btn--lg" onclick="submitForm()">
+          📨 Enviar Pedido de Personalização
+        </button>
+        <p style="font-size:12px;color:var(--aw-gray-400);font-family:'Space Grotesk',sans-serif;">
+          Retornamos em até 24 horas úteis
+        </p>
+      </div>
+    </div>
+
+    <!-- Success -->
+    <div id="formSuccess" style="display:none;text-align:center;padding:80px 20px;">
+      <div style="font-size:72px;margin-bottom:24px;">✅</div>
+      <h3 style="font-family:'Bebas Neue',sans-serif;font-size:56px;letter-spacing:3px;color:var(--aw-white);margin-bottom:16px;">PEDIDO ENVIADO!</h3>
+      <p style="font-size:16px;color:var(--aw-gray-400);margin-bottom:40px;line-height:1.7;">
+        Recebemos sua solicitação! Nossa equipe vai analisar sua ideia e entrar em contato em até 24 horas úteis com um orçamento personalizado.
+      </p>
+      <a th:href="@{/anchorwear}" class="aw-btn aw-btn--outline aw-btn--lg">Voltar ao Início</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- FAQ Personalization -->
+<section class="aw-section--dark">
+  <div class="aw-container" style="max-width:800px;">
+    <div class="aw-section-header">
+      <p class="aw-section-label">Dúvidas</p>
+      <h2 class="aw-section-title">FAQ</h2>
+    </div>
+    <div class="aw-faq">
+      <div class="aw-faq-item">
+        <button class="aw-faq-question" onclick="toggleFaq(this)">
+          Qual o prazo para personalização?
+          <span class="aw-faq-icon">+</span>
+        </button>
+        <div class="aw-faq-answer">
+          Após aprovação da arte, o prazo de produção é de 7 a 15 dias úteis, dependendo da quantidade e técnica escolhida. O envio é adicional conforme a modalidade de frete.
+        </div>
+      </div>
+      <div class="aw-faq-item">
+        <button class="aw-faq-question" onclick="toggleFaq(this)">
+          Qual a quantidade mínima?
+          <span class="aw-faq-icon">+</span>
+        </button>
+        <div class="aw-faq-answer">
+          Aceitamos pedidos a partir de 1 peça! Para pedidos maiores (acima de 10 peças), temos condições especiais de preço. Entre em contato para um orçamento personalizado.
+        </div>
+      </div>
+      <div class="aw-faq-item">
+        <button class="aw-faq-question" onclick="toggleFaq(this)">
+          Posso enviar minha própria arte?
+          <span class="aw-faq-icon">+</span>
+        </button>
+        <div class="aw-faq-answer">
+          Sim! Aceitamos arquivos em PNG (mínimo 300dpi), PDF, AI ou EPS. Se precisar de ajuda com a arte, nossa equipe de design pode criar para você por uma taxa adicional.
+        </div>
+      </div>
+      <div class="aw-faq-item">
+        <button class="aw-faq-question" onclick="toggleFaq(this)">
+          Qual técnica é melhor para minha ideia?
+          <span class="aw-faq-icon">+</span>
+        </button>
+        <div class="aw-faq-answer">
+          Depende da arte! Serigrafia é ideal para grandes quantidades com cores sólidas. DTF é perfeito para estampas fotográficas e gradientes. Bordado dá acabamento premium. Nos conta sua ideia que recomendamos a melhor técnica.
+        </div>
+      </div>
+      <div class="aw-faq-item">
+        <button class="aw-faq-question" onclick="toggleFaq(this)">
+          Fazem uniformes para empresas?
+          <span class="aw-faq-icon">+</span>
+        </button>
+        <div class="aw-faq-answer">
+          Sim! Atendemos empresas, times, grupos e eventos. Temos preços especiais para volumes a partir de 20 peças. Entre em contato pelo formulário ou WhatsApp para um orçamento corporativo.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function toggleFaq(btn) {
+    btn.closest('.aw-faq-item').classList.toggle('open');
+  }
+
+  function handleFile(input) {
+    if (input.files && input.files[0]) {
+      const name = input.files[0].name;
+      document.getElementById('fileDrop').innerHTML =
+        `<div class="aw-file-drop__icon">✅</div>
+         <p class="aw-file-drop__title">${name}</p>
+         <p class="aw-file-drop__sub">Arquivo selecionado — clique para trocar</p>`;
+    }
+  }
+
+  // Drag & drop
+  const drop = document.getElementById('fileDrop');
+  drop.addEventListener('dragover', e => { e.preventDefault(); drop.style.borderColor = 'var(--aw-accent)'; });
+  drop.addEventListener('dragleave', () => { drop.style.borderColor = ''; });
+  drop.addEventListener('drop', e => {
+    e.preventDefault(); drop.style.borderColor = '';
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      drop.innerHTML = `<div class="aw-file-drop__icon">✅</div><p class="aw-file-drop__title">${file.name}</p><p class="aw-file-drop__sub">Arquivo selecionado — clique para trocar</p>`;
+    }
+  });
+
+  function submitForm() {
+    const name = document.getElementById('pName').value.trim();
+    const email = document.getElementById('pEmail').value.trim();
+    const qty = document.getElementById('pQty').value;
+    const type = document.getElementById('pType').value;
+    const desc = document.getElementById('pDesc').value.trim();
+
+    if (!name || !email || !qty || !type || !desc) {
+      showToast('⚠️', 'Por favor preencha todos os campos obrigatórios (*)');
+      return;
+    }
+
+    document.getElementById('personForm').style.display = 'none';
+    document.getElementById('formSuccess').style.display = 'block';
+    window.scrollTo({ top: document.getElementById('formulario').offsetTop, behavior: 'smooth' });
+  }
+</script>
+
+</section>
+</body>
+</html>

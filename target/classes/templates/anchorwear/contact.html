@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{anchorwear/layout :: layout(~{::title}, ~{::section#main}, 'contact')}">
+<head><title>Contato</title></head>
+<body>
+<section id="main">
+
+<!-- Hero -->
+<div class="aw-page-hero">
+  <div class="aw-container">
+    <p class="aw-section-label" style="justify-content:center;">Fale Conosco</p>
+    <h1 class="aw-page-hero__title">CON<span>TATO</span></h1>
+    <p class="aw-page-hero__subtitle">
+      Tem alguma dúvida, pedido especial ou só quer bater um papo? A gente está aqui.
+    </p>
+  </div>
+</div>
+
+<section class="aw-section">
+  <div class="aw-container">
+    <div class="aw-contact-grid">
+
+      <!-- Info Panel -->
+      <div class="aw-contact-info">
+        <h2 class="aw-contact-info__title">VAMOS CONVERSAR</h2>
+        <p class="aw-contact-info__text">
+          Respondemos todas as mensagens em até 24 horas úteis. Para pedidos urgentes, entre em contato pelo WhatsApp.
+        </p>
+        <div class="aw-contact-items">
+          <div class="aw-contact-item">
+            <span class="aw-contact-item__icon">📧</span>
+            <div>
+              <p class="aw-contact-item__label">E-mail</p>
+              <p class="aw-contact-item__value">contato@anchorwear.com.br</p>
+            </div>
+          </div>
+          <div class="aw-contact-item">
+            <span class="aw-contact-item__icon">💬</span>
+            <div>
+              <p class="aw-contact-item__label">WhatsApp</p>
+              <p class="aw-contact-item__value">(11) 99999-0000</p>
+            </div>
+          </div>
+          <div class="aw-contact-item">
+            <span class="aw-contact-item__icon">📸</span>
+            <div>
+              <p class="aw-contact-item__label">Instagram</p>
+              <p class="aw-contact-item__value">@_anchorwearoficial</p>
+            </div>
+          </div>
+          <div class="aw-contact-item">
+            <span class="aw-contact-item__icon">⏰</span>
+            <div>
+              <p class="aw-contact-item__label">Horário de Atendimento</p>
+              <p class="aw-contact-item__value">Seg–Sex: 9h às 18h</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:32px;">
+          <a href="https://wa.me/5511999990000" target="_blank" class="aw-btn aw-btn--accent aw-btn--full">
+            💬 Chamar no WhatsApp
+          </a>
+        </div>
+      </div>
+
+      <!-- Form + FAQ -->
+      <div>
+        <!-- Contact Form -->
+        <div class="aw-form" id="contactForm">
+          <h3 style="font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:2px;color:var(--aw-white);margin-bottom:32px;">ENVIE UMA MENSAGEM</h3>
+          <div class="aw-form-grid">
+            <div class="aw-form-group">
+              <label class="aw-label">Nome *</label>
+              <input type="text" class="aw-input" placeholder="Seu nome" id="cName"/>
+            </div>
+            <div class="aw-form-group">
+              <label class="aw-label">E-mail *</label>
+              <input type="email" class="aw-input" placeholder="seu@email.com" id="cEmail"/>
+            </div>
+            <div class="aw-form-group">
+              <label class="aw-label">Telefone</label>
+              <input type="tel" class="aw-input" placeholder="(00) 00000-0000" id="cPhone"/>
+            </div>
+            <div class="aw-form-group">
+              <label class="aw-label">Assunto *</label>
+              <select class="aw-select" id="cSubject">
+                <option value="">Selecione...</option>
+                <option value="pedido">Dúvida sobre Pedido</option>
+                <option value="personalizar">Personalização</option>
+                <option value="troca">Troca / Devolução</option>
+                <option value="atacado">Atacado / Corporativo</option>
+                <option value="parceria">Parceria</option>
+                <option value="outro">Outro</option>
+              </select>
+            </div>
+            <div class="aw-form-group aw-form-group--full">
+              <label class="aw-label">Mensagem *</label>
+              <textarea class="aw-textarea" style="min-height:140px;" placeholder="Escreva sua mensagem aqui..." id="cMsg"></textarea>
+            </div>
+          </div>
+          <div style="margin-top:24px;">
+            <button class="aw-btn aw-btn--primary aw-btn--lg" onclick="submitContact()">
+              Enviar Mensagem →
+            </button>
+          </div>
+        </div>
+
+        <!-- Success -->
+        <div id="contactSuccess" style="display:none;text-align:center;padding:60px 40px;background:var(--aw-charcoal);border:1px solid var(--aw-gray-800);border-radius:var(--radius-lg);">
+          <div style="font-size:56px;margin-bottom:20px;">✅</div>
+          <h3 style="font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:3px;color:var(--aw-white);margin-bottom:12px;">MENSAGEM ENVIADA!</h3>
+          <p style="font-size:15px;color:var(--aw-gray-400);line-height:1.7;">Recebemos seu contato e responderemos em até 24 horas úteis.</p>
+        </div>
+
+        <!-- FAQ -->
+        <div class="aw-faq" style="margin-top:60px;">
+          <div class="aw-section-header">
+            <p class="aw-section-label">Perguntas Frequentes</p>
+            <h2 class="aw-section-title" style="font-size:clamp(36px,5vw,60px);">FAQ</h2>
+          </div>
+
+          <div class="aw-faq-item">
+            <button class="aw-faq-question" onclick="this.closest('.aw-faq-item').classList.toggle('open')">
+              Em quanto tempo chega meu pedido?
+              <span class="aw-faq-icon">+</span>
+            </button>
+            <div class="aw-faq-answer">
+              Pedidos de produtos prontos são processados em até 24h úteis. O prazo de entrega varia de 2 a 10 dias úteis dependendo da modalidade de frete escolhida e da sua localização.
+            </div>
+          </div>
+
+          <div class="aw-faq-item">
+            <button class="aw-faq-question" onclick="this.closest('.aw-faq-item').classList.toggle('open')">
+              Como funciona a troca ou devolução?
+              <span class="aw-faq-icon">+</span>
+            </button>
+            <div class="aw-faq-answer">
+              Você tem 30 dias corridos a partir do recebimento para solicitar troca ou devolução. O produto deve estar sem uso e com a etiqueta original. Trocas por tamanho têm frete por nossa conta na primeira vez.
+            </div>
+          </div>
+
+          <div class="aw-faq-item">
+            <button class="aw-faq-question" onclick="this.closest('.aw-faq-item').classList.toggle('open')">
+              Quais formas de pagamento vocês aceitam?
+              <span class="aw-faq-icon">+</span>
+            </button>
+            <div class="aw-faq-answer">
+              Aceitamos Pix (desconto de 5%), cartão de crédito (até 12x sem juros nos principais cartões) e boleto bancário (prazo de 3 dias úteis para compensação).
+            </div>
+          </div>
+
+          <div class="aw-faq-item">
+            <button class="aw-faq-question" onclick="this.closest('.aw-faq-item').classList.toggle('open')">
+              Como rastreio meu pedido?
+              <span class="aw-faq-icon">+</span>
+            </button>
+            <div class="aw-faq-answer">
+              Assim que seu pedido for enviado, você receberá um e-mail com o código de rastreio dos Correios. Você pode acompanhar em tempo real pelo site rastreamento.correios.com.br.
+            </div>
+          </div>
+
+          <div class="aw-faq-item">
+            <button class="aw-faq-question" onclick="this.closest('.aw-faq-item').classList.toggle('open')">
+              Fazem envio para todo o Brasil?
+              <span class="aw-faq-icon">+</span>
+            </button>
+            <div class="aw-faq-answer">
+              Sim! Enviamos para todos os estados brasileiros via Correios (PAC e Sedex). Para pedidos acima de R$299, o frete é grátis para a maioria das regiões.
+            </div>
+          </div>
+
+          <div class="aw-faq-item">
+            <button class="aw-faq-question" onclick="this.closest('.aw-faq-item').classList.toggle('open')">
+              Têm desconto para atacado?
+              <span class="aw-faq-icon">+</span>
+            </button>
+            <div class="aw-faq-answer">
+              Sim! Para pedidos acima de 20 peças, temos condições especiais. Entre em contato pelo formulário acima ou direto pelo WhatsApp para conversar sobre atacado, uniformes e pedidos corporativos.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function submitContact() {
+    const name = document.getElementById('cName').value.trim();
+    const email = document.getElementById('cEmail').value.trim();
+    const subject = document.getElementById('cSubject').value;
+    const msg = document.getElementById('cMsg').value.trim();
+    if (!name || !email || !subject || !msg) {
+      showToast('⚠️', 'Por favor preencha todos os campos obrigatórios.');
+      return;
+    }
+    document.getElementById('contactForm').style.display = 'none';
+    document.getElementById('contactSuccess').style.display = 'block';
+  }
+</script>
+
+</section>
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout(title, content, page)">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title th:text="${title} + ' — Anchor Wear Oficial'">Anchor Wear Oficial</title>
+  <meta name="description" content="Não é só roupa. É a sua ideia virando camiseta. Anchor Wear Oficial — Streetwear autêntico."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
+  <link rel="stylesheet" th:href="@{/css/anchorwear.css}"/>
+</head>
+<body class="aw-body">
+
+<!-- Notice Bar -->
+<div class="aw-notice">
+  🚢 FRETE GRÁTIS ACIMA DE R$299 &nbsp;·&nbsp; PARCELE EM ATÉ 12X SEM JUROS &nbsp;·&nbsp; TROCA FÁCIL
+</div>
+
+<!-- Navigation -->
+<nav class="aw-nav">
+  <a th:href="@{/anchorwear}" class="aw-nav__brand">ANCHOR<span>.</span>WEAR</a>
+
+  <ul class="aw-nav__links" id="navLinks">
+    <li><a th:href="@{/anchorwear}" th:classappend="${page == 'home'} ? 'active'">Início</a></li>
+    <li><a th:href="@{/anchorwear/shop}" th:classappend="${page == 'shop'} ? 'active'">Loja</a></li>
+    <li><a th:href="@{/anchorwear/personalizar}" th:classappend="${page == 'personalize'} ? 'active'">Personalizar</a></li>
+    <li><a th:href="@{/anchorwear/sobre}" th:classappend="${page == 'about'} ? 'active'">Sobre</a></li>
+    <li><a th:href="@{/anchorwear/contato}" th:classappend="${page == 'contact'} ? 'active'">Contato</a></li>
+  </ul>
+
+  <div class="aw-nav__actions">
+    <button class="aw-nav__icon" onclick="document.getElementById('searchOverlay').style.display='flex'" title="Buscar">🔍</button>
+    <a th:href="@{/anchorwear/carrinho}" class="aw-nav__icon" style="display:inline-flex;align-items:center;justify-content:center;" title="Carrinho">
+      🛒
+      <span class="aw-nav__cart-count" id="cartCount">0</span>
+    </a>
+    <button class="aw-nav__hamburger" onclick="toggleNav()" title="Menu">☰</button>
+  </div>
+</nav>
+
+<!-- Search Overlay -->
+<div id="searchOverlay" style="display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0.95);align-items:center;justify-content:center;flex-direction:column;gap:20px;">
+  <button onclick="document.getElementById('searchOverlay').style.display='none'" style="position:absolute;top:24px;right:32px;background:none;border:none;color:white;font-size:32px;cursor:pointer;">✕</button>
+  <p style="font-family:'Space Grotesk',sans-serif;font-size:12px;letter-spacing:4px;text-transform:uppercase;color:#8a8a8a;">BUSCAR PRODUTOS</p>
+  <input type="text" placeholder="O que você está procurando?" style="width:min(600px,90vw);background:transparent;border:none;border-bottom:2px solid #c8a96e;padding:16px 0;font-family:'Inter',sans-serif;font-size:24px;color:white;outline:none;text-align:center;" oninput="handleSearch(this.value)" id="searchInput"/>
+  <div id="searchResults" style="width:min(600px,90vw);display:flex;flex-direction:column;gap:8px;"></div>
+</div>
+
+<!-- Page Content -->
+<div th:replace="${content}"></div>
+
+<!-- Footer -->
+<footer class="aw-footer">
+  <div class="aw-container">
+    <div class="aw-footer__grid">
+      <div>
+        <div class="aw-footer__brand">ANCHOR<span>.</span>WEAR</div>
+        <p class="aw-footer__tagline">Não é só roupa. É a sua ideia virando camiseta. Streetwear autêntico para quem tem personalidade.</p>
+        <div class="aw-footer__social">
+          <a href="https://www.instagram.com/_anchorwearoficial/" target="_blank" class="aw-footer__social-link" title="Instagram">📸</a>
+          <a href="#" class="aw-footer__social-link" title="TikTok">🎵</a>
+          <a href="#" class="aw-footer__social-link" title="WhatsApp">💬</a>
+          <a href="#" class="aw-footer__social-link" title="YouTube">▶</a>
+        </div>
+      </div>
+      <div>
+        <p class="aw-footer__col-title">Loja</p>
+        <ul class="aw-footer__col-links">
+          <li><a th:href="@{/anchorwear/shop}">Todos os Produtos</a></li>
+          <li><a th:href="@{/anchorwear/shop}">Camisetas</a></li>
+          <li><a th:href="@{/anchorwear/shop}">Moletons</a></li>
+          <li><a th:href="@{/anchorwear/shop}">Acessórios</a></li>
+          <li><a th:href="@{/anchorwear/shop}">Lançamentos</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="aw-footer__col-title">Marca</p>
+        <ul class="aw-footer__col-links">
+          <li><a th:href="@{/anchorwear/sobre}">Nossa História</a></li>
+          <li><a th:href="@{/anchorwear/personalizar}">Personalizar</a></li>
+          <li><a th:href="@{/anchorwear/contato}">Contato</a></li>
+          <li><a th:href="@{/anchorwear/contato}">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="aw-footer__col-title">Atendimento</p>
+        <ul class="aw-footer__col-links">
+          <li><a href="#">Rastrear Pedido</a></li>
+          <li><a href="#">Política de Troca</a></li>
+          <li><a href="#">Tabela de Tamanhos</a></li>
+          <li><a href="#">Privacidade</a></li>
+          <li><a href="#">Termos de Uso</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="aw-footer__bottom">
+      <span class="aw-footer__copy">© 2024 Anchor Wear Oficial. Todos os direitos reservados.</span>
+      <div class="aw-footer__legal">
+        <a href="#">Privacidade</a>
+        <a href="#">Termos</a>
+        <a href="#">LGPD</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Toast -->
+<div class="aw-toast" id="toast">
+  <span class="aw-toast__icon" id="toastIcon"></span>
+  <span id="toastMsg"></span>
+</div>
+
+<script th:inline="javascript">
+  // Cart (localStorage)
+  function getCart() {
+    try { return JSON.parse(localStorage.getItem('aw_cart') || '[]'); } catch { return []; }
+  }
+  function saveCart(cart) {
+    localStorage.setItem('aw_cart', JSON.stringify(cart));
+    updateCartBadge();
+  }
+  function updateCartBadge() {
+    const cart = getCart();
+    const count = cart.reduce((s, i) => s + (i.qty || 1), 0);
+    document.querySelectorAll('#cartCount').forEach(el => el.textContent = count);
+  }
+  function addToCart(id, name, price, size, color) {
+    const cart = getCart();
+    const key = `${id}-${size}-${color}`;
+    const existing = cart.find(i => i.key === key);
+    if (existing) { existing.qty = (existing.qty || 1) + 1; }
+    else { cart.push({ key, id, name, price, size, color, qty: 1 }); }
+    saveCart(cart);
+    showToast('✅', name + ' adicionado ao carrinho!');
+  }
+  function showToast(icon, msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toastIcon').textContent = icon;
+    document.getElementById('toastMsg').textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+  function toggleNav() {
+    document.getElementById('navLinks').classList.toggle('open');
+  }
+
+  // Search
+  const PRODUCTS = [
+    {id:1,name:'Camiseta Anchor Classic',category:'Camisetas',price:'R$ 89,90'},
+    {id:2,name:'Camiseta Urban Wave',category:'Camisetas',price:'R$ 94,90'},
+    {id:3,name:'Camiseta Deep Sea',category:'Camisetas',price:'R$ 89,90'},
+    {id:4,name:'Moletom Anchor Premium',category:'Moletons',price:'R$ 189,90'},
+    {id:5,name:'Camiseta Street Code',category:'Camisetas',price:'R$ 89,90'},
+    {id:6,name:'Moletom Hood City',category:'Moletons',price:'R$ 199,90'},
+    {id:7,name:'Camiseta Origin',category:'Camisetas',price:'R$ 94,90'},
+    {id:8,name:'Boné Anchor Cap',category:'Acessórios',price:'R$ 69,90'},
+    {id:9,name:'Camiseta Tide',category:'Camisetas',price:'R$ 99,90'},
+    {id:10,name:'Mochila Anchor',category:'Acessórios',price:'R$ 149,90'},
+  ];
+  function handleSearch(q) {
+    const results = document.getElementById('searchResults');
+    if (!q.trim()) { results.innerHTML = ''; return; }
+    const matches = PRODUCTS.filter(p => p.name.toLowerCase().includes(q.toLowerCase()));
+    results.innerHTML = matches.map(p =>
+      `<a href="/anchorwear/produto/${p.id}" style="display:flex;justify-content:space-between;align-items:center;padding:14px 20px;background:#1e1e1e;border-radius:6px;color:white;text-decoration:none;font-family:Space Grotesk,sans-serif;transition:background 0.2s;" onmouseover="this.style.background='#2a2a2a'" onmouseout="this.style.background='#1e1e1e'">
+        <div>
+          <div style="font-size:15px;font-weight:600;">${p.name}</div>
+          <div style="font-size:12px;color:#8a8a8a;margin-top:2px;">${p.category}</div>
+        </div>
+        <div style="font-size:15px;font-weight:700;color:#c8a96e;">${p.price}</div>
+      </a>`
+    ).join('');
+    if (!matches.length) results.innerHTML = '<p style="text-align:center;color:#8a8a8a;font-family:Space Grotesk,sans-serif;font-size:14px;">Nenhum produto encontrado.</p>';
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') document.getElementById('searchOverlay').style.display = 'none';
+  });
+
+  updateCartBadge();
+</script>
+</body>
+</html>
