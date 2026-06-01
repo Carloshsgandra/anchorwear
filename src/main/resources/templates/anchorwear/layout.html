@@ -123,8 +123,8 @@
   <span id="toastMsg"></span>
 </div>
 
-<script th:inline="javascript">
-  // Cart (localStorage)
+<script>
+  /* ===== Cart (localStorage) ===== */
   function getCart() {
     try { return JSON.parse(localStorage.getItem('aw_cart') || '[]'); } catch { return []; }
   }
@@ -133,70 +133,80 @@
     updateCartBadge();
   }
   function updateCartBadge() {
-    const cart = getCart();
-    const count = cart.reduce((s, i) => s + (i.qty || 1), 0);
+    const count = getCart().reduce((s, i) => s + (i.qty || 1), 0);
     document.querySelectorAll('#cartCount').forEach(el => el.textContent = count);
   }
-  function addToCart(id, name, price, size, color) {
+
+  /* addToCart — aceita qty opcional, mostra apenas 1 toast */
+  function addToCart(id, name, price, size, color, qty) {
+    qty = Math.max(1, parseInt(qty) || 1);
     const cart = getCart();
-    const key = `${id}-${size}-${color}`;
+    const key = id + '-' + size + '-' + color;
     const existing = cart.find(i => i.key === key);
-    if (existing) { existing.qty = (existing.qty || 1) + 1; }
-    else { cart.push({ key, id, name, price, size, color, qty: 1 }); }
+    if (existing) { existing.qty = (existing.qty || 1) + qty; }
+    else { cart.push({ key, id, name, price, size, color, qty }); }
     saveCart(cart);
     showToast('✅', name + ' adicionado ao carrinho!');
   }
+
+  /* Botões de cards (shop/index): tamanho e cor padrão */
+  function addToCartFromBtn(btn) {
+    const id = parseInt(btn.dataset.id);
+    const name = btn.dataset.name;
+    const price = parseFloat(btn.dataset.price);
+    if (!id || !name || isNaN(price)) return;
+    addToCart(id, name, price, 'M', 'Padrão', 1);
+  }
+
+  /* Toast */
   function showToast(icon, msg) {
     const t = document.getElementById('toast');
+    if (!t) return;
     document.getElementById('toastIcon').textContent = icon;
     document.getElementById('toastMsg').textContent = msg;
     t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 3000);
   }
-  function addToCartFromBtn(btn) {
-    addToCart(parseInt(btn.dataset.id), btn.dataset.name, parseFloat(btn.dataset.price), 'M', 'Padrão');
-  }
-  function handleAddToCartBtn(btn) {
-    const id = parseInt(btn.dataset.id);
-    const name = btn.dataset.name;
-    const price = parseFloat(btn.dataset.price);
-    const size = document.querySelector('.aw-size-btn.active')?.textContent || 'M';
-    const color = document.querySelector('.aw-color-btn.active')?.textContent || 'Padrão';
-    const qty = parseInt(document.getElementById('qtyVal')?.textContent || '1');
-    for (let i = 0; i < qty; i++) addToCart(id, name, price, size, color);
-  }
+
+  /* Nav mobile */
   function toggleNav() {
     document.getElementById('navLinks').classList.toggle('open');
   }
 
-  // Search
-  const PRODUCTS = [
-    {id:1,name:'Camiseta Anchor Classic',category:'Camisetas',price:'R$ 89,90'},
-    {id:2,name:'Camiseta Urban Wave',category:'Camisetas',price:'R$ 94,90'},
-    {id:3,name:'Camiseta Deep Sea',category:'Camisetas',price:'R$ 89,90'},
-    {id:4,name:'Moletom Anchor Premium',category:'Moletons',price:'R$ 189,90'},
-    {id:5,name:'Camiseta Street Code',category:'Camisetas',price:'R$ 89,90'},
-    {id:6,name:'Moletom Hood City',category:'Moletons',price:'R$ 199,90'},
-    {id:7,name:'Camiseta Origin',category:'Camisetas',price:'R$ 94,90'},
-    {id:8,name:'Boné Anchor Cap',category:'Acessórios',price:'R$ 69,90'},
-    {id:9,name:'Camiseta Tide',category:'Camisetas',price:'R$ 99,90'},
-    {id:10,name:'Mochila Anchor',category:'Acessórios',price:'R$ 149,90'},
-  ];
-  function handleSearch(q) {
-    const results = document.getElementById('searchResults');
-    if (!q.trim()) { results.innerHTML = ''; return; }
-    const matches = PRODUCTS.filter(p => p.name.toLowerCase().includes(q.toLowerCase()));
-    results.innerHTML = matches.map(p =>
-      `<a href="/anchorwear/produto/${p.id}" style="display:flex;justify-content:space-between;align-items:center;padding:14px 20px;background:#1e1e1e;border-radius:6px;color:white;text-decoration:none;font-family:Space Grotesk,sans-serif;transition:background 0.2s;" onmouseover="this.style.background='#2a2a2a'" onmouseout="this.style.background='#1e1e1e'">
-        <div>
-          <div style="font-size:15px;font-weight:600;">${p.name}</div>
-          <div style="font-size:12px;color:#8a8a8a;margin-top:2px;">${p.category}</div>
-        </div>
-        <div style="font-size:15px;font-weight:700;color:#c8a96e;">${p.price}</div>
-      </a>`
-    ).join('');
-    if (!matches.length) results.innerHTML = '<p style="text-align:center;color:#8a8a8a;font-family:Space Grotesk,sans-serif;font-size:14px;">Nenhum produto encontrado.</p>';
+  /* ===== Busca dinâmica via API ===== */
+  let _searchCache = null;
+  async function _loadProducts() {
+    if (_searchCache) return _searchCache;
+    try {
+      const r = await fetch('/api/products');
+      _searchCache = await r.json();
+    } catch (e) { _searchCache = []; }
+    return _searchCache;
   }
+
+  async function handleSearch(q) {
+    const results = document.getElementById('searchResults');
+    if (!q || !q.trim()) { results.innerHTML = ''; return; }
+    const products = await _loadProducts();
+    const term = q.toLowerCase();
+    const matches = products.filter(p =>
+      (p.name && p.name.toLowerCase().includes(term)) ||
+      (p.category && p.category.toLowerCase().includes(term))
+    );
+    if (!matches.length) {
+      results.innerHTML = '<p style="text-align:center;color:#8a8a8a;font-family:Space Grotesk,sans-serif;font-size:14px;">Nenhum produto encontrado.</p>';
+      return;
+    }
+    results.innerHTML = matches.map(p => {
+      const href = '/anchorwear/produto/' + p.id;
+      const price = p.priceFormatted || ('R$ ' + parseFloat(p.price).toFixed(2).replace('.', ','));
+      return '<a href="' + href + '" style="display:flex;justify-content:space-between;align-items:center;padding:14px 20px;background:#1e1e1e;border-radius:6px;color:white;text-decoration:none;font-family:Space Grotesk,sans-serif;transition:background 0.2s;" onmouseover="this.style.background=\'#2a2a2a\'" onmouseout="this.style.background=\'#1e1e1e\'">'
+        + '<div><div style="font-size:15px;font-weight:600;">' + p.name + '</div>'
+        + '<div style="font-size:12px;color:#8a8a8a;margin-top:2px;">' + p.category + '</div></div>'
+        + '<div style="font-size:15px;font-weight:700;color:#c8a96e;">' + price + '</div></a>';
+    }).join('');
+  }
+
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') document.getElementById('searchOverlay').style.display = 'none';
   });

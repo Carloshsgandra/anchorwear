@@ -35,9 +35,18 @@ public class AccountController {
     public String dashboard(@AuthenticationPrincipal UserDetails ud, Model model) {
         User user = getUser(ud);
         List<Order> orders = orderService.findByUser(user);
+        long delivered = orders.stream()
+                .filter(o -> o.getStatus() == Order.OrderStatus.DELIVERED).count();
+        long active = orders.stream()
+                .filter(o -> o.getStatus() == Order.OrderStatus.PENDING
+                        || o.getStatus() == Order.OrderStatus.PROCESSING
+                        || o.getStatus() == Order.OrderStatus.CONFIRMED
+                        || o.getStatus() == Order.OrderStatus.SHIPPED).count();
         model.addAttribute("user", user);
         model.addAttribute("orders", orders);
         model.addAttribute("totalOrders", orders.size());
+        model.addAttribute("deliveredCount", delivered);
+        model.addAttribute("activeCount", active);
         model.addAttribute("page", "conta");
         return "conta/dashboard";
     }

@@ -32,13 +32,11 @@
             <div class="aw-stat-card__label">Pedidos</div>
           </div>
           <div class="aw-stat-card">
-            <div class="aw-stat-card__value"
-                 th:text="${orders.stream().filter(o -> o.status.name() == 'DELIVERED').count()}">0</div>
+            <div class="aw-stat-card__value" th:text="${deliveredCount}">0</div>
             <div class="aw-stat-card__label">Entregues</div>
           </div>
           <div class="aw-stat-card">
-            <div class="aw-stat-card__value"
-                 th:text="${orders.stream().filter(o -> o.status.name() == 'PENDING' || o.status.name() == 'PROCESSING' || o.status.name() == 'SHIPPED').count()}">0</div>
+            <div class="aw-stat-card__value" th:text="${activeCount}">0</div>
             <div class="aw-stat-card__label">Em andamento</div>
           </div>
         </div>

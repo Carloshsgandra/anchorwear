@@ -69,6 +69,10 @@ public class Order {
     public String getTotalFormatted() {
         return "R$ " + String.format("%.2f", total).replace('.', ',');
     }
+    public boolean isHasDiscount() {
+        return discount != null && discount.compareTo(BigDecimal.ZERO) > 0;
+    }
+
     public String getShippingAddress() {
         return shippingStreet + ", " + shippingNumber
                 + (shippingComplement != null && !shippingComplement.isBlank() ? " - " + shippingComplement : "")

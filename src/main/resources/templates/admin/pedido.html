@@ -51,7 +51,7 @@
     </div>
     <div style="text-align:right;padding:12px 16px;border-top:1px solid #f0f0f0;">
       <div class="aw-order-summary-row"><span>Subtotal</span><span th:text="${order.subtotalFormatted}">R$ 0</span></div>
-      <div class="aw-order-summary-row" th:if="${order.discount.compareTo(T(java.math.BigDecimal).ZERO) > 0}">
+      <div class="aw-order-summary-row" th:if="${order.hasDiscount}">
         <span>Desconto</span><span style="color:#4CAF50;" th:text="'- ' + order.discountFormatted">- R$ 0</span>
       </div>
       <div class="aw-order-summary-row"><span>Frete</span><span th:text="${order.shippingFormatted}">R$ 0</span></div>

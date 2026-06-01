@@ -92,10 +92,11 @@
         <!-- Add to Cart -->
         <div class="aw-add-to-cart" style="margin-top:20px;">
           <button class="aw-btn aw-btn--primary aw-btn--full aw-btn--lg" style="flex:1;"
+                  id="addToCartBtn"
                   th:data-id="${product.id}"
                   th:data-name="${product.name}"
                   th:data-price="${product.price}"
-                  onclick="handleAddToCartBtn(this)">
+                  onclick="doAddToCart(this)">
             🛒 Adicionar ao Carrinho
           </button>
           <button class="aw-btn aw-btn--outline" style="min-width:56px;padding:0;display:flex;align-items:center;justify-content:center;font-size:20px;" title="Favoritar">♡</button>
@@ -201,45 +202,55 @@
 </div>
 
 <script>
-  let qty = 1;
-  let selectedSize = null;
-  let selectedColor = null;
+  let _qty = 1;
+  let _selectedSize = null;
+  let _selectedColor = null;
 
   function selectSize(btn) {
     document.querySelectorAll('.aw-size-btn').forEach(b => b.classList.remove('selected'));
     btn.classList.add('selected');
-    selectedSize = btn.textContent;
-    document.getElementById('selectedSize').textContent = selectedSize;
+    _selectedSize = btn.textContent.trim();
+    document.getElementById('selectedSize').textContent = _selectedSize;
   }
 
   function selectColor(btn) {
     document.querySelectorAll('.aw-color-btn').forEach(b => b.classList.remove('selected'));
     btn.classList.add('selected');
-    selectedColor = btn.textContent;
-    document.getElementById('selectedColor').textContent = selectedColor;
+    _selectedColor = btn.textContent.trim();
+    document.getElementById('selectedColor').textContent = _selectedColor;
   }
 
   function changeQty(delta) {
-    qty = Math.max(1, Math.min(10, qty + delta));
-    document.getElementById('qtyVal').textContent = qty;
+    _qty = Math.max(1, Math.min(10, _qty + delta));
+    document.getElementById('qtyVal').textContent = _qty;
   }
 
-  function handleAddToCart(id, name, price) {
-    if (!selectedSize) { showToast('⚠️', 'Selecione um tamanho!'); return; }
-    if (!selectedColor) { showToast('⚠️', 'Selecione uma cor!'); return; }
-    for (let i = 0; i < qty; i++) addToCart(id, name, price, selectedSize, selectedColor);
-    showToast('✅', name + ' adicionado ao carrinho!');
+  /* Chamado pelo botão "Adicionar ao Carrinho" */
+  function doAddToCart(btn) {
+    if (!_selectedSize) { showToast('⚠️', 'Selecione um tamanho!'); return; }
+    if (!_selectedColor) { showToast('⚠️', 'Selecione uma cor!'); return; }
+    const id = parseInt(btn.dataset.id);
+    const name = btn.dataset.name;
+    const price = parseFloat(btn.dataset.price);
+    addToCart(id, name, price, _selectedSize, _selectedColor, _qty);
   }
 
   function toggleAccordion(btn) {
-    const item = btn.closest('.aw-faq-item');
-    item.classList.toggle('open');
+    btn.closest('.aw-faq-item').classList.toggle('open');
   }
 
   function selectThumb(el) {
     document.querySelectorAll('.aw-product-detail__thumb').forEach(t => t.classList.remove('active'));
     el.classList.add('active');
   }
+
+  /* Selecionar primeiro tamanho e cor automaticamente */
+  window.addEventListener('DOMContentLoaded', () => {
+    const firstSize = document.querySelector('.aw-size-btn');
+    if (firstSize) selectSize(firstSize);
+    const firstColor = document.querySelector('.aw-color-btn');
+    if (firstColor) selectColor(firstColor);
+  });
 </script>
 
 </section>

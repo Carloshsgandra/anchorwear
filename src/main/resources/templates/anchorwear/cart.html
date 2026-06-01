@@ -180,12 +180,19 @@
 </div>
 
 <script>
-  let freteValue = 0;
-  let discountValue = 0;
-  const COUPONS = { 'ANCHOR10': 0.10, 'ANCORA20': 0.20, 'ESTREIA': 0.15 };
+  let _freteValue = 0;
+  let _discountAmount = 0; // valor absoluto em R$
+  let _appliedCoupon = '';
 
-  function fmt(v) { return 'R$ ' + v.toFixed(2).replace('.', ','); }
+  function fmt(v) {
+    return 'R$ ' + parseFloat(v).toFixed(2).replace('.', ',');
+  }
 
+  function calcSubtotal() {
+    return getCart().reduce((s, i) => s + parseFloat(i.price) * (parseInt(i.qty) || 1), 0);
+  }
+
+  /* ===== Renderização do carrinho ===== */
   function renderCart() {
     const cart = getCart();
     const empty = document.getElementById('cartEmpty');
@@ -196,29 +203,26 @@
       content.style.display = 'none';
       return;
     }
-
     empty.style.display = 'none';
     content.style.display = 'grid';
 
-    const itemsEl = document.getElementById('cartItems');
-    itemsEl.innerHTML = cart.map(item => `
-      <div class="aw-cart-item" data-key="${item.key}">
-        <div class="aw-cart-item__img" style="background:#1e1e1e;">
-          <span style="font-size:40px;opacity:0.3;">⚓</span>
-        </div>
-        <div>
-          <p class="aw-cart-item__name">${item.name}</p>
-          <p class="aw-cart-item__meta">Tamanho: ${item.size} · Cor: ${item.color}</p>
-          <div class="aw-qty" style="margin-bottom:12px;">
-            <button onclick="updateQty('${item.key}', -1)" style="width:36px;height:40px;">−</button>
-            <span class="aw-qty__val" style="width:44px;height:40px;line-height:40px;font-size:14px;">${item.qty}</span>
-            <button onclick="updateQty('${item.key}', 1)" style="width:36px;height:40px;">+</button>
-          </div>
-          <button class="aw-cart-item__remove" onclick="removeItem('${item.key}')">✕ Remover</button>
-        </div>
-        <div class="aw-cart-item__price">${fmt(item.price * item.qty)}</div>
-      </div>
-    `).join('');
+    document.getElementById('cartItems').innerHTML = cart.map(item => {
+      const safeKey = item.key.replace(/'/g, "\\'");
+      return '<div class="aw-cart-item" data-key="' + item.key + '">'
+        + '<div class="aw-cart-item__img" style="background:#1e1e1e;"><span style="font-size:40px;opacity:0.3;">⚓</span></div>'
+        + '<div>'
+        + '<p class="aw-cart-item__name">' + item.name + '</p>'
+        + '<p class="aw-cart-item__meta">Tamanho: ' + item.size + ' · Cor: ' + item.color + '</p>'
+        + '<div class="aw-qty" style="margin-bottom:12px;">'
+        + '<button onclick="updateQty(\'' + safeKey + '\',-1)" style="width:36px;height:40px;">−</button>'
+        + '<span class="aw-qty__val" style="width:44px;height:40px;line-height:40px;font-size:14px;">' + (item.qty || 1) + '</span>'
+        + '<button onclick="updateQty(\'' + safeKey + '\',1)" style="width:36px;height:40px;">+</button>'
+        + '</div>'
+        + '<button class="aw-cart-item__remove" onclick="removeItem(\'' + safeKey + '\')">✕ Remover</button>'
+        + '</div>'
+        + '<div class="aw-cart-item__price">' + fmt(parseFloat(item.price) * (parseInt(item.qty) || 1)) + '</div>'
+        + '</div>';
+    }).join('');
 
     updateTotals();
   }
@@ -227,42 +231,59 @@
     const cart = getCart();
     const item = cart.find(i => i.key === key);
     if (!item) return;
-    item.qty = Math.max(1, (item.qty || 1) + delta);
+    item.qty = Math.max(1, (parseInt(item.qty) || 1) + delta);
     saveCart(cart);
     renderCart();
   }
 
   function removeItem(key) {
-    const cart = getCart().filter(i => i.key !== key);
-    saveCart(cart);
+    saveCart(getCart().filter(i => i.key !== key));
     renderCart();
     showToast('🗑️', 'Item removido do carrinho.');
   }
 
   function updateTotals() {
-    const cart = getCart();
-    const subtotal = cart.reduce((s, i) => s + i.price * (i.qty || 1), 0);
-    const frete = subtotal >= 299 ? 0 : freteValue;
-    const discount = subtotal * discountValue;
-    const total = subtotal + frete - discount;
+    const subtotal = calcSubtotal();
+    const frete = subtotal >= 299 ? 0 : _freteValue;
+    const discount = Math.min(_discountAmount, subtotal);
+    const total = Math.max(0, subtotal + frete - discount);
 
     document.getElementById('subtotalVal').textContent = fmt(subtotal);
-    document.getElementById('freteVal').textContent = subtotal >= 299 ? 'Grátis 🎉' : (frete > 0 ? fmt(frete) : 'Calcular');
-    document.getElementById('descontoVal').textContent = discount > 0 ? '— ' + fmt(discount) : '— R$ 0,00';
+    document.getElementById('freteVal').textContent =
+      subtotal >= 299 ? 'Grátis 🎉' : (frete > 0 ? fmt(frete) : 'Calcular');
+    document.getElementById('descontoVal').textContent =
+      discount > 0 ? '— ' + fmt(discount) : '— R$ 0,00';
     document.getElementById('totalVal').textContent = fmt(total);
   }
 
-  function applyCoupon() {
+  /* ===== Cupom via API ===== */
+  async function applyCoupon() {
     const code = document.getElementById('couponInput').value.trim().toUpperCase();
-    if (COUPONS[code]) {
-      discountValue = COUPONS[code];
-      showToast('✅', `Cupom aplicado! ${(discountValue * 100).toFixed(0)}% de desconto.`);
-      updateTotals();
-    } else {
-      showToast('❌', 'Cupom inválido ou expirado.');
+    if (!code) return;
+    const subtotal = calcSubtotal();
+    try {
+      const res = await fetch('/api/coupon/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code, subtotal: subtotal.toString() })
+      });
+      const data = await res.json();
+      if (data.valid) {
+        _discountAmount = parseFloat(data.discount) || 0;
+        _appliedCoupon = code;
+        showToast('✅', 'Cupom ' + code + ' aplicado! ' + data.description);
+        updateTotals();
+      } else {
+        _discountAmount = 0;
+        showToast('❌', data.message || 'Cupom inválido ou expirado.');
+        updateTotals();
+      }
+    } catch (e) {
+      showToast('❌', 'Erro ao validar cupom.');
     }
   }
 
+  /* ===== Frete ===== */
   function formatCep(input) {
     let v = input.value.replace(/\D/g, '').slice(0, 8);
     if (v.length > 5) v = v.slice(0, 5) + '-' + v.slice(5);
@@ -272,23 +293,16 @@
   function calcFrete() {
     const cep = document.getElementById('cepInput').value.replace(/\D/g, '');
     if (cep.length !== 8) { showToast('⚠️', 'CEP inválido.'); return; }
-    const opts = document.getElementById('freteOptions');
-    opts.style.display = 'flex';
-    showToast('✅', 'Opções de frete disponíveis!');
+    document.getElementById('freteOptions').style.display = 'flex';
+    showToast('✅', 'Escolha o tipo de frete!');
   }
 
-  function selectFrete(value, label) {
-    freteValue = value;
+  function selectFrete(value) {
+    _freteValue = value;
     updateTotals();
   }
 
-  function checkout() {
-    showToast('🛒', 'Redirecionando para o pagamento...');
-    setTimeout(() => {
-      alert('Esta é uma demonstração. Em produção, redirecionaria para o gateway de pagamento.');
-    }, 1000);
-  }
-
+  /* ===== Inicialização ===== */
   renderCart();
 </script>
 
